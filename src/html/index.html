@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebOS - Web Operating System</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/loading.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="windows-logo">⊞</div>
+            </div>
+            <div class="loading-text">WebOS</div>
+            <div class="loading-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+            <div class="loading-status">
+                <div class="progress-text" id="progressText">Initializing...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop -->
+    <div id="desktop" class="desktop" style="display: none;">
+        <!-- Desktop icons will be added here -->
+        
+        <!-- Temporary test button -->
+        <div style="position: absolute; top: 50px; right: 50px; z-index: 1000;">
+            <button id="testSettingsBtn" style="
+                background: var(--os-accent);
+                color: var(--os-text-light);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                margin-right: 10px;
+            ">Test Settings</button>
+            <button id="testAboutMeBtn" style="
+                background: var(--os-accent);
+                color: var(--os-text-light);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                margin-right: 10px;
+            ">Test About Me</button>
+            <button id="testDuplicateBtn" style="
+                background: #ff6b6b;
+                color: var(--os-text-light);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                margin-right: 10px;
+            ">Test Duplicate Prevention</button>
+            <button id="testAnimationsBtn" style="
+                background: #4ecdc4;
+                color: var(--os-text-light);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                margin-right: 10px;
+            ">Test Animations</button>
+            <button id="testLoadingDelayBtn" style="
+                background: #fdcb6e;
+                color: var(--os-text-light);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+            ">Test Loading Delay</button>
+            <button id="testLoadingScreenBtn" style="
+                background: #a29bfe;
+                color: var(--os-text-light);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+            ">Test Loading Screen</button>
+            <button id="testDesktopInteractivityBtn" style="
+                background: #fd79a8;
+                color: var(--os-text-light);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+            ">Test Desktop Interactivity</button>
+            <button id="testTaskbarBtn" style="
+                background: #00b894;
+                color: var(--os-text-light);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+            ">Test Taskbar</button>
+            <button id="testStartMenuBtn" style="
+                background: #e84393;
+                color: var(--os-text-light);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+            ">Test Start Menu</button>
+            <button id="testDragDropBtn" style="
+                background: #0984e3;
+                color: var(--os-text-light);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+            ">Test Drag & Drop</button>
+        </div>
+
+        <!-- Loading Delay Controls -->
+        <div style="position: absolute; top: 120px; right: 50px; z-index: 1000; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; color: white;">
+            <div style="margin-bottom: 10px; font-weight: bold;">Loading Delay Controls:</div>
+            <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+                <button id="delay0Btn" style="
+                    background: #6c5ce7;
+                    color: white;
+                    border: none;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 12px;
+                ">0s</button>
+                <button id="delay1Btn" style="
+                    background: #6c5ce7;
+                    color: white;
+                    border: none;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 12px;
+                ">1s</button>
+                <button id="delay2Btn" style="
+                    background: #6c5ce7;
+                    color: white;
+                    border: none;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 12px;
+                ">2s</button>
+                <button id="delay3Btn" style="
+                    background: #6c5ce7;
+                    color: white;
+                    border: none;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 12px;
+                ">3s</button>
+                <button id="delay5Btn" style="
+                    background: #6c5ce7;
+                    color: white;
+                    border: none;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 12px;
+                ">5s</button>
+            </div>
+            <div style="font-size: 12px; opacity: 0.8;">
+                Current: <span id="currentDelay">2s</span>
+            </div>
+            <button id="restartBtn" style="
+                background: #e17055;
+                color: white;
+                border: none;
+                padding: 8px 15px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 12px;
+                margin-top: 10px;
+                width: 100%;
+            ">Restart with New Delay</button>
+        </div>
+    </div>
+
+    <!-- Windows Container -->
+    <div id="windowsContainer" class="windows-container"></div>
+
+    <!-- Module Configuration -->
+    <script>
+        window.WEBOS_MODULES = {
+            // Core modules (required)
+            core: {
+                desktop: true,
+                windowManager: true,
+                eventBus: true,
+                templateLoader: true,
+                taskbar: true,
+                themeManager: true
+            },
+            
+            // UI modules
+            ui: {
+                startMenu: true,
+                desktopIcons: true,
+                contextMenu: true,
+                notifications: true
+            },
+            
+            // App modules
+            apps: {
+                aboutMe: true,
+                calculator: true,
+                notepad: true,
+                explorer: true,
+                settings: true
+            },
+            
+            // Feature modules
+            features: {
+                dragAndDrop: true,
+                resizing: true,
+                search: true,
+                animations: true,
+                localStorage: true
+            },
+            
+            // Third-party modules
+            thirdparty: {
+                threejs: false,
+                facebook: false
+            }
+        };
+    </script>
+
+    <!-- Core Module Loader -->
+    <script src="modules/core/module-loader/module-loader.js"></script>
+    <script src="modules/core/event-bus/event-bus.js"></script>
+    <script src="modules/core/template-loader/template-loader.js"></script>
+    <script src="modules/core/window-manager/window-manager.js"></script>
+    <script src="modules/core/desktop/desktop.js"></script>
+    <script src="modules/core/taskbar/taskbar.js"></script>
+    <script src="modules/core/theme-manager/theme-manager.js"></script>
+    
+    <!-- UI Modules -->
+    <script src="modules/ui/start-menu/start-menu.js"></script>
+    <script src="modules/ui/desktop-icons/desktop-icons.js"></script>
+    <script src="modules/ui/context-menu/context-menu.js"></script>
+    <script src="modules/ui/notifications/notifications.js"></script>
+    
+    <!-- App Modules -->
+    <script src="modules/apps/aboutme/about-me.control.js"></script>
+    <script src="modules/apps/aboutme/about-me.processor.js"></script>
+    <script src="modules/apps/calculator/calculator.control.js"></script>
+    <script src="modules/apps/calculator/calculator.processor.js"></script>
+    <script src="modules/apps/settings/settings.control.js"></script>
+    <script src="modules/apps/settings/settings.processor.js"></script>
+    
+    <!-- Feature Modules -->
+    <script src="modules/features/drag-and-drop/drag-and-drop.js"></script>
+    <script src="modules/features/resizing/resizing.js"></script>
+    <script src="modules/features/search/search.js"></script>
+    <script src="modules/features/animations/animations.js"></script>
+    <script src="modules/features/local-storage/local-storage.js"></script>
+    
+    <!-- Main App -->
+    <script src="js/app.js"></script>
+</body>
+</html> 

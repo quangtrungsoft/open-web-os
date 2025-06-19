@@ -1,0 +1,197 @@
+/* Loading Screen Styles */
+.loading-screen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 9999 !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    transform: none !important;
+}
+
+.loading-content {
+    text-align: center !important;
+    color: white !important;
+    max-width: 400px !important;
+    padding: 40px !important;
+    position: relative !important;
+    transform: none !important;
+}
+
+.loading-logo {
+    margin-bottom: 40px !important;
+    position: relative !important;
+    transform: none !important;
+}
+
+.windows-logo {
+    font-size: 80px !important;
+    font-weight: bold !important;
+    animation: logoPulse 2s ease-in-out infinite !important;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    display: block !important;
+    position: relative !important;
+    transform: none !important;
+}
+
+@keyframes logoPulse {
+    0%, 100% {
+        transform: scale(1) !important;
+        opacity: 1 !important;
+    }
+    50% {
+        transform: scale(1.1) !important;
+        opacity: 0.8 !important;
+    }
+}
+
+.loading-text {
+    font-size: 24px !important;
+    font-weight: 300 !important;
+    margin-bottom: 30px !important;
+    animation: textFade 2s ease-in-out infinite !important;
+    position: relative !important;
+    transform: none !important;
+}
+
+@keyframes textFade {
+    0%, 100% {
+        opacity: 1 !important;
+    }
+    50% {
+        opacity: 0.7 !important;
+    }
+}
+
+.loading-progress {
+    width: 100% !important;
+    height: 4px !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 2px !important;
+    margin-bottom: 20px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    transform: none !important;
+}
+
+.loading-progress .progress-bar {
+    height: 100% !important;
+    background: white !important;
+    border-radius: 2px !important;
+    width: 0% !important;
+    transition: width 0.3s ease !important;
+    position: relative !important;
+    transform: none !important;
+}
+
+.loading-progress .progress-fill {
+    height: 100% !important;
+    background: white !important;
+    border-radius: 2px !important;
+    width: 0% !important;
+    transition: width 0.3s ease !important;
+    position: relative !important;
+    transform: none !important;
+}
+
+.loading-progress .progress-bar::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent) !important;
+    animation: progressShine 1.5s infinite !important;
+}
+
+@keyframes progressShine {
+    0% {
+        left: -100% !important;
+    }
+    100% {
+        left: 100% !important;
+    }
+}
+
+.loading-status {
+    font-size: 14px !important;
+    opacity: 0.8 !important;
+    min-height: 20px !important;
+    animation: statusFade 1s ease-in-out !important;
+    position: relative !important;
+    transform: none !important;
+}
+
+.loading-status .progress-text {
+    position: relative !important;
+    transform: none !important;
+}
+
+@keyframes statusFade {
+    from {
+        opacity: 0 !important;
+        transform: translateY(10px) !important;
+    }
+    to {
+        opacity: 0.8 !important;
+        transform: translateY(0) !important;
+    }
+}
+
+/* Loading screen fade out animation */
+.loading-screen.fade-out {
+    animation: fadeOut 0.5s ease-out forwards;
+}
+
+.loading-screen.hidden {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    z-index: -1 !important;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Responsive loading screen */
+@media (max-width: 768px) {
+    .loading-content {
+        padding: 20px;
+    }
+    
+    .windows-logo {
+        font-size: 60px;
+    }
+    
+    .loading-text {
+        font-size: 20px;
+    }
+    
+    .loading-status {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .windows-logo {
+        font-size: 50px;
+    }
+    
+    .loading-text {
+        font-size: 18px;
+    }
+} 
