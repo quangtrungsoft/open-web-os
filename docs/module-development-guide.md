@@ -4,6 +4,16 @@
 
 This guide explains how to create new modules for WebOS that properly integrate with the unified theme system and follow the established architectural patterns.
 
+## Dock Bar Settings and Pin/Unpin Apps (2024 Update)
+
+- The dock (taskbar) now supports a system window for settings, accessible via the ⚙️ button.
+- Dock settings are implemented as a system window/app using `DockSettingsProcessor` and `DockSettingsControl`.
+- Users can set dock position (bottom, top, left, right) and pin/unpin apps to the dock.
+- Pinned apps are always visible in the dock, even if not running, and persist after reload (localStorage keys: `webos_dock_pinned_apps`, `webos_dock_position`).
+- The dock settings window uses the same conventions as other system apps (template, processor, control separation).
+- See `core/taskbar/dock-settings.html` and `core/taskbar/dock-settings.js` for implementation.
+- Use this as a reference for building other system window apps.
+
 ## Module Types
 
 ### 1. Core Modules

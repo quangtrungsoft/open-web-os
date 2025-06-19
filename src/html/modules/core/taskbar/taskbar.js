@@ -28,6 +28,7 @@ class Taskbar {
         this.createTaskbar();
         this.bindEvents();
         this.isInitialized = true;
+        this.refreshDockItems();
         
         console.log('Taskbar initialized');
         return true;
@@ -49,7 +50,7 @@ class Taskbar {
         // Create dock settings button
         this.dockSettingsBtn = document.createElement('button');
         this.dockSettingsBtn.className = 'dock-settings-btn';
-        this.dockSettingsBtn.title = 'Dock Position';
+        this.dockSettingsBtn.title = 'Dock Settings';
         this.dockSettingsBtn.innerHTML = '⚙️';
 
         // Assemble dock
@@ -58,6 +59,23 @@ class Taskbar {
 
         // Add to page
         document.body.appendChild(this.taskbarElement);
+
+        // Inject dock settings modal HTML if not present
+        if (!document.getElementById('dockSettingsModal')) {
+            fetch('modules/core/taskbar/dock-settings.html')
+                .then(r => r.text())
+                .then(html => {
+                    const div = document.createElement('div');
+                    div.innerHTML = html;
+                    document.body.appendChild(div.firstElementChild);
+                });
+        }
+        // Load dock-settings.js if not present
+        if (!window.openDockSettings) {
+            const script = document.createElement('script');
+            script.src = 'modules/core/taskbar/dock-settings.js';
+            document.body.appendChild(script);
+        }
 
         // Load dock position from storage
         this.setDockPosition(this.getDockPosition());
@@ -93,7 +111,12 @@ class Taskbar {
         // Dock settings button click
         this.dockSettingsBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            this.showDockPositionMenu();
+            if (window.DockSettingsProcessor) {
+                const dockSettings = new window.DockSettingsProcessor();
+                dockSettings.open();
+            } else {
+                this.showDockPositionMenu();
+            }
         });
 
         // Listen for window events
@@ -155,45 +178,99 @@ class Taskbar {
         }, 10);
     }
 
-    addDockItem(windowData) {
-        const { id, title, icon } = windowData;
+    refreshDockItems() {
+        // Always show pinned apps, and running apps
         const dockItems = this.taskbarElement.querySelector('.dock-items');
-        const dockItem = document.createElement('div');
-        dockItem.className = 'dock-item';
-        dockItem.dataset.windowId = id;
-        dockItem.innerHTML = `
-            <div class="dock-icon">${icon}</div>
-            <div class="dock-label">${title}</div>
-        `;
-        dockItem.addEventListener('click', () => {
-            this.handleDockItemClick(id);
+        if (!dockItems) return;
+        dockItems.innerHTML = '';
+        // Get pinned apps from localStorage
+        let pinned = [];
+        try {
+            pinned = JSON.parse(localStorage.getItem('webos_dock_pinned_apps') || '[]');
+        } catch {}
+        // Get all available apps from moduleLoader
+        let allApps = [];
+        if (window.moduleLoader && typeof window.moduleLoader.getAllModules === 'function') {
+            const modules = window.moduleLoader.getAllModules();
+            modules.forEach((mod, name) => {
+                if (mod && mod.appId && mod.appName && mod.appIcon) {
+                    allApps.push({
+                        id: mod.appId,
+                        name: mod.appName,
+                        icon: mod.appIcon
+                    });
+                }
+            });
+        }
+        // Render pinned apps first
+        pinned.forEach(appId => {
+            const app = allApps.find(a => a.id === appId);
+            if (app) {
+                const dockItem = document.createElement('div');
+                dockItem.className = 'dock-item dock-pinned';
+                dockItem.dataset.appId = app.id;
+                dockItem.innerHTML = `
+                    <div class="dock-icon">${app.icon}</div>
+                    <div class="dock-label">${app.name}</div>
+                `;
+                dockItem.addEventListener('click', () => {
+                    // Open app if not running, else focus
+                    if (window.moduleLoader && typeof window.moduleLoader.getModule === 'function') {
+                        const mod = window.moduleLoader.getModule(app.id.charAt(0).toUpperCase() + app.id.slice(1) + 'Processor');
+                        if (mod && typeof mod.open === 'function') {
+                            mod.open();
+                        }
+                    }
+                });
+                dockItems.appendChild(dockItem);
+            }
         });
-        dockItems.appendChild(dockItem);
+        // Render running windows (avoid duplicates)
+        this.taskbarItems.forEach((item, winId) => {
+            const { data } = item;
+            // If already rendered as pinned, skip
+            if (pinned.includes(data.appId)) return;
+            const dockItem = document.createElement('div');
+            dockItem.className = 'dock-item';
+            dockItem.dataset.windowId = winId;
+            dockItem.innerHTML = `
+                <div class="dock-icon">${data.icon}</div>
+                <div class="dock-label">${data.title}</div>
+            `;
+            dockItem.addEventListener('click', () => {
+                this.handleDockItemClick(winId);
+            });
+            dockItems.appendChild(dockItem);
+        });
+    }
+
+    addDockItem(windowData) {
+        const { id } = windowData;
         this.taskbarItems.set(id, {
-            element: dockItem,
+            element: null,
             data: windowData,
             minimized: false,
             focused: false
         });
+        this.refreshDockItems();
     }
 
     removeDockItem(windowId) {
-        const item = this.taskbarItems.get(windowId);
-        if (item) {
-            item.element.remove();
-            this.taskbarItems.delete(windowId);
-        }
+        this.taskbarItems.delete(windowId);
+        this.refreshDockItems();
     }
 
     updateDockItem(windowId, updates) {
         const item = this.taskbarItems.get(windowId);
         if (item) {
             Object.assign(item, updates);
-            if (updates.minimized !== undefined) {
-                item.element.classList.toggle('minimized', updates.minimized);
-            }
-            if (updates.focused !== undefined) {
-                item.element.classList.toggle('active', updates.focused);
+            if (item.element) {
+                if (updates.minimized !== undefined) {
+                    item.element.classList.toggle('minimized', updates.minimized);
+                }
+                if (updates.focused !== undefined) {
+                    item.element.classList.toggle('active', updates.focused);
+                }
             }
         }
     }

@@ -125,19 +125,58 @@ this.eventBus.emit('windowCreated', { id });
 }
 ```
 
+---
+
+## Dock Bar Settings and Pin/Unpin Feature (2024 Update)
+
+### Overview
+The dock (taskbar) now supports advanced settings and persistent app pinning:
+- **Dock Settings**: Accessed via the ⚙️ button, opens as a system window (not a modal)
+- **Dock Position**: Choose dock position (bottom, top, left, right)
+- **Pin/Unpin Apps**: Select which apps are always visible in the dock, even if not running
+- **Persistence**: Pinned apps and dock position are saved in localStorage and restored on reload
+- **System Window**: Dock settings use the same window system as other apps (see `DockSettingsProcessor`)
+
+### User Experience
+- Click the ⚙️ button on the dock to open Dock Settings
+- Change dock position or pin/unpin apps
+- Pinned apps always appear in the dock, even after reload or if their window is closed
+- Unpinning removes the app from the dock (unless running)
+
+### Developer Notes
+- Dock settings are implemented as a system window using the event bus and template loader
+- The dock bar logic (`taskbar.js`) now always renders pinned apps and running apps
+- Pin/unpin and position are stored in localStorage (`webos_dock_pinned_apps`, `webos_dock_position`)
+- The dock settings UI is in `core/taskbar/dock-settings.html` and logic in `core/taskbar/dock-settings.js`
+- The dock settings window follows the same conventions as other system apps (see `SettingsProcessor`)
+
+### Example
+```javascript
+// Open dock settings window
+const dockSettings = new window.DockSettingsProcessor();
+dockSettings.open();
+```
+
+---
+
 ## Technical Details
 
 ### Data Flow
 1. **App Processor** → Creates window with `title` and `icon`
 2. **Window Manager** → Receives full window data and emits `windowCreated` event
 3. **Taskbar** → Receives complete data and creates taskbar item
-4. **CSS** → Renders flexible layout with proper icon and text
+4. **DockSettingsProcessor** → Opens system window for dock settings
+5. **CSS** → Renders flexible layout with proper icon and text
 
 ### Layout Structure
 ```
 .taskbar-item
 ├── .taskbar-icon (emoji/icon)
 └── .taskbar-title (application name)
+
+dock-item (for dock bar)
+├── .dock-icon (emoji/icon)
+└── .dock-label (application name)
 ```
 
 ### Responsive Breakpoints
@@ -184,10 +223,14 @@ Added "Test Taskbar" button:
 - Icons should be centered above text
 - Text should be properly aligned and sized
 - Long names should truncate with ellipsis
+- Dock bar should show pinned apps and running apps
+- Dock settings window should open and function as described
 
 ### 2. Functional Verification
-- Opening apps should create taskbar items with correct data
-- Taskbar items should be clickable
+- Opening apps should create taskbar/dock items with correct data
+- Dock settings should allow pin/unpin and position changes
+- Pinned apps should persist after reload
+- Taskbar/dock items should be clickable
 - Items should have proper hover effects
 - Active windows should show visual indicators
 
@@ -199,7 +242,7 @@ Added "Test Taskbar" button:
 ### 4. Test Button Verification
 1. Click "Test Taskbar" button
 2. Check browser console for detailed diagnostics
-3. Verify taskbar item creation with test data
+3. Verify taskbar/dock item creation with test data
 4. Confirm responsive behavior with long names
 
 ## Example Results
@@ -217,6 +260,7 @@ Taskbar Item: [🧮] Calculator
 Width: Flexible (40px - 200px)
 Layout: Icon above text
 Text: Truncated if too long
+Dock bar: Pinned apps always visible, settings window available
 ```
 
 ## Browser Compatibility
@@ -234,14 +278,17 @@ Text: Truncated if too long
 ## Future Improvements
 - Add tooltips for truncated text
 - Implement taskbar grouping for similar apps
-- Add taskbar item animations
-- Consider taskbar customization options
+- Add taskbar/dock item animations
+- Consider more dock customization options
 
 ## Files Modified
 1. `src/html/modules/core/window-manager/window-manager.js` - Enhanced event data
 2. `src/html/styles/main.css` - Improved taskbar styling
 3. `src/html/js/app.js` - Added test functionality
 4. `src/html/index.html` - Added test button
+5. `src/html/modules/core/taskbar/taskbar.js` - Dock bar pin/unpin and settings logic
+6. `src/html/modules/core/taskbar/dock-settings.js` - Dock settings system window logic
+7. `src/html/modules/core/taskbar/dock-settings.html` - Dock settings window template
 
 ## Testing Commands
 ```javascript
@@ -260,12 +307,12 @@ taskbarItems.forEach(item => {
 window.eventBus.emit('windowCreated', {
     id: 'test-window',
     title: 'Test Application',
-    icon: '🧪'
+    icon: '🧮'
 });
 ```
 
 ## Troubleshooting
-If taskbar items still show "undefined":
+If taskbar or dock items still show "undefined":
 1. Check browser console for error messages
 2. Use "Test Taskbar" button for diagnostics
 3. Verify window creation data is complete

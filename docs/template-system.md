@@ -4,6 +4,17 @@
 
 The WebOS now uses a template system that separates UI (HTML) from logic (JavaScript). This provides better maintainability, reusability, and cleaner code organization.
 
+---
+
+## System Windows and Settings Templates (2024 Update)
+
+- The template system is now also used for system windows, such as the dock settings window.
+- Example: `core/taskbar/dock-settings.html` is loaded as a system window template via the template loader.
+- The same conventions apply: keep UI in HTML, logic in JS (see `DockSettingsProcessor`).
+- The template loader can be used for both app windows and system settings windows.
+
+---
+
 ## File Structure
 
 ```
@@ -33,19 +44,22 @@ The `TemplateLoader` class handles loading HTML templates from separate files.
 // Initialize template loader
 const templateLoader = new TemplateLoader();
 
-// Load a single template
+// Load a single template (app or system window)
 const template = await templateLoader.loadTemplate('apps/about-me.html');
+const dockSettingsTemplate = await templateLoader.loadTemplate('core/taskbar/dock-settings.html');
 
 // Load multiple templates
 const templates = await templateLoader.loadTemplates([
     'apps/notepad.html',
-    'apps/calculator.html'
+    'apps/calculator.html',
+    'core/taskbar/dock-settings.html'
 ]);
 
 // Preload templates for better performance
 await templateLoader.preloadTemplates([
     'apps/about-me.html',
-    'apps/notepad.html'
+    'apps/notepad.html',
+    'core/taskbar/dock-settings.html'
 ]);
 ```
 
@@ -118,23 +132,21 @@ class MyApp {
 window.MyApp = MyApp;
 ```
 
-### 3. Register the App
+---
 
-Add the app to the module configuration in `index.html`:
-
+**Note:** For system windows (like dock settings), use the same approach:
 ```javascript
-window.WINDOWS_MODULES = {
-    apps: {
-        myApp: true  // Enable your app
-    }
-};
+const dockSettingsTemplate = await templateLoader.loadTemplate('core/taskbar/dock-settings.html');
+window.eventBus.emit('createWindow', {
+    title: 'Dock Settings',
+    content: dockSettingsTemplate,
+    width: 480,
+    height: 420,
+    centered: true
+});
 ```
 
-And include the script:
-
-```html
-<script src="js/modules/apps/my-app.js"></script>
-```
+---
 
 ## Template Best Practices
 
