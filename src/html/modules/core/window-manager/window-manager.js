@@ -164,7 +164,7 @@ class WindowManager {
                     <div class="window-control close" title="Close">×</div>
                 </div>
             </div>
-            <div class="window-content">
+            <div class="window-content" style="max-height: calc(100% - var(--window-titlebar-height)); min-height: 0;">
                 ${content}
             </div>
             ${resizable ? '<div class="window-resize-handle"></div>' : ''}
@@ -367,6 +367,12 @@ class WindowManager {
 
             element.style.width = `${newWidth}px`;
             element.style.height = `${newHeight}px`;
+            
+            // Update window content max-height to ensure proper scrolling
+            const windowContent = element.querySelector('.window-content');
+            if (windowContent) {
+                windowContent.style.maxHeight = `calc(100% - ${getComputedStyle(document.documentElement).getPropertyValue('--window-titlebar-height') || '32px'})`;
+            }
         });
 
         document.addEventListener('mouseup', () => {
@@ -447,6 +453,15 @@ class WindowManager {
         windowData.element.style.display = 'block';
         windowData.isMinimized = false;
 
+        // Ensure window content can scroll properly
+        const windowContent = windowData.element.querySelector('.window-content');
+        if (windowContent) {
+            // Force a reflow to ensure proper sizing
+            windowContent.style.height = 'auto';
+            windowContent.offsetHeight; // Force reflow
+            windowContent.style.maxHeight = `calc(100% - ${getComputedStyle(document.documentElement).getPropertyValue('--window-titlebar-height') || '32px'})`;
+        }
+
         // Focus the restored window
         this.focusWindow(windowId);
 
@@ -469,6 +484,15 @@ class WindowManager {
             windowData.element.style.left = windowData.originalPosition.left;
             windowData.element.style.top = windowData.originalPosition.top;
             windowData.isMaximized = false;
+            
+            // Ensure window content can scroll properly after restore
+            const windowContent = windowData.element.querySelector('.window-content');
+            if (windowContent) {
+                // Force a reflow to ensure proper sizing
+                windowContent.style.height = 'auto';
+                windowContent.offsetHeight; // Force reflow
+                windowContent.style.maxHeight = `calc(100% - ${getComputedStyle(document.documentElement).getPropertyValue('--window-titlebar-height') || '32px'})`;
+            }
         } else {
             // Save original size and position
             windowData.originalSize = {

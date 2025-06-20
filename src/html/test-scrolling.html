@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Window Scrolling Test</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/loading.css">
+</head>
+<body>
+    <div id="desktop" class="desktop">
+        <div class="desktop-icons">
+            <div class="desktop-icon" onclick="testWindowScrolling()">
+                <div class="icon-image">📄</div>
+                <div class="icon-label">Test Scrolling</div>
+            </div>
+        </div>
+        <div id="windows-container" class="windows-container"></div>
+    </div>
+
+    <script>
+        // Simple test function to create a window with long content
+        function testWindowScrolling() {
+            const longContent = `
+                <h2>Test Window with Long Content</h2>
+                <p>This is a test to verify that window scrolling works properly after restoration.</p>
+                ${Array.from({length: 50}, (_, i) => `
+                    <div style="margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 4px;">
+                        <h3>Section ${i + 1}</h3>
+                        <p>This is content for section ${i + 1}. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                        Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </div>
+                `).join('')}
+                <div style="margin: 20px 0; padding: 20px; background: #0078d4; color: white; border-radius: 4px;">
+                    <h3>End of Content</h3>
+                    <p>If you can see this, scrolling is working properly!</p>
+                </div>
+            `;
+
+            // Create a simple window
+            const windowElement = document.createElement('div');
+            windowElement.className = 'window';
+            windowElement.id = 'test-window';
+            windowElement.style.width = '400px';
+            windowElement.style.height = '300px';
+            windowElement.style.left = '100px';
+            windowElement.style.top = '100px';
+            windowElement.style.zIndex = '1000';
+
+            windowElement.innerHTML = `
+                <div class="window-titlebar">
+                    <div class="window-title">Test Scrolling Window</div>
+                    <div class="window-controls">
+                        <div class="window-control minimize" onclick="minimizeWindow()">─</div>
+                        <div class="window-control maximize" onclick="maximizeWindow()">□</div>
+                        <div class="window-control close" onclick="closeWindow()">×</div>
+                    </div>
+                </div>
+                <div class="window-content" style="max-height: calc(100% - var(--window-titlebar-height)); min-height: 0;">
+                    ${longContent}
+                </div>
+            `;
+
+            document.getElementById('windows-container').appendChild(windowElement);
+        }
+
+        function minimizeWindow() {
+            const window = document.getElementById('test-window');
+            if (window) {
+                window.style.display = 'none';
+                setTimeout(() => {
+                    window.style.display = 'block';
+                    // Ensure content can scroll after restore
+                    const content = window.querySelector('.window-content');
+                    if (content) {
+                        content.style.maxHeight = `calc(100% - ${getComputedStyle(document.documentElement).getPropertyValue('--window-titlebar-height') || '32px'})`;
+                    }
+                }, 1000);
+            }
+        }
+
+        function maximizeWindow() {
+            const window = document.getElementById('test-window');
+            if (window) {
+                if (window.style.width === '100%') {
+                    // Restore
+                    window.style.width = '400px';
+                    window.style.height = '300px';
+                    window.style.left = '100px';
+                    window.style.top = '100px';
+                } else {
+                    // Maximize
+                    window.style.width = '100%';
+                    window.style.height = 'calc(100% - 40px)';
+                    window.style.left = '0';
+                    window.style.top = '0';
+                }
+                // Ensure content can scroll
+                const content = window.querySelector('.window-content');
+                if (content) {
+                    content.style.maxHeight = `calc(100% - ${getComputedStyle(document.documentElement).getPropertyValue('--window-titlebar-height') || '32px'})`;
+                }
+            }
+        }
+
+        function closeWindow() {
+            const window = document.getElementById('test-window');
+            if (window) {
+                window.remove();
+            }
+        }
+    </script>
+</body>
+</html> 
