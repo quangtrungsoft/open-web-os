@@ -1169,15 +1169,48 @@ body {
 a {
   color: var(--link-color);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color 0.2s, box-shadow 0.2s, background 0.2s;
+  border-radius: 4px;
+  padding: 2px 4px;
+  outline: none;
+  position: relative;
 }
+
 a:hover, a:focus {
   color: var(--link-hover-color);
+  background: rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   text-decoration: none;
 }
+
 a:active {
   color: var(--link-active-color);
+  background: rgba(0,0,0,0.08);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10);
 }
+
 a:visited {
   color: var(--link-visited-color);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--link-hover-color);
+  outline-offset: 2px;
+}
+
+a::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: var(--link-hover-color);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+a:hover::after, a:focus::after {
+  transform: scaleX(1);
 } 
