@@ -1,0 +1,74 @@
+/* Professional Theme - Clean and Bright */
+
+:root {
+    /* Primary Colors */
+    --os-bg: #ffffff;
+    --os-bg-dark: #f5f5f5;
+    --os-accent: #0078d4;
+    --os-accent-light: #40a9ff;
+    --os-accent-dark: #005a9e;
+    
+    /* Text Colors */
+    --os-text: #000000;
+    --os-text-secondary: #666666;
+    --os-text-light: #ffffff;
+    
+    /* Border Colors */
+    --os-border: #e0e0e0;
+    --os-border-light: #f0f0f0;
+    
+    /* Shadow Colors */
+    --os-shadow: rgba(0, 0, 0, 0.1);
+    --os-shadow-dark: rgba(0, 0, 0, 0.2);
+    
+    /* Taskbar Colors */
+    --taskbar-bg: rgba(255, 255, 255, 0.9);
+    --taskbar-bg-hover: rgba(0, 0, 0, 0.1);
+    --taskbar-bg-active: rgba(0, 0, 0, 0.2);
+    
+    /* Start Menu Colors */
+    --start-menu-bg: rgba(255, 255, 255, 0.95);
+    --start-menu-item-hover: rgba(0, 0, 0, 0.1);
+    
+    /* Window Colors */
+    --window-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Desktop Background */
+body.theme-professional .desktop {
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+}
+
+/* Theme-specific overrides */
+.professional-theme .window {
+    background: #ffffff;
+    border: 1px solid var(--os-border);
+    box-shadow: var(--window-shadow);
+    color: var(--os-text);
+}
+
+.professional-theme .window-titlebar {
+    background: #f8f9fa;
+    border-bottom: 1px solid var(--os-border);
+}
+
+.professional-theme .taskbar {
+    background: var(--taskbar-bg);
+    color: var(--os-text);
+}
+
+.professional-theme .start-menu {
+    background: var(--start-menu-bg);
+    color: var(--os-text);
+}
+
+.professional-theme .context-menu {
+    background: #ffffff;
+    border: 1px solid var(--os-border);
+    color: var(--os-text);
+    box-shadow: var(--window-shadow);
+}
+
+.professional-theme .context-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+} 

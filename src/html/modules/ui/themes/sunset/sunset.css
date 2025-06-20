@@ -1,0 +1,70 @@
+/* Sunset Theme - Warm Colors */
+
+:root {
+    /* Primary Colors */
+    --os-bg: #e17055;
+    --os-bg-dark: #d63031;
+    --os-accent: #e17055;
+    --os-accent-light: #fab1a0;
+    --os-accent-dark: #d63031;
+    
+    /* Text Colors */
+    --os-text: #2d3436;
+    --os-text-secondary: #636e72;
+    --os-text-light: #ffffff;
+    
+    /* Border Colors */
+    --os-border: #fdcb6e;
+    --os-border-light: #ffeaa7;
+    
+    /* Shadow Colors */
+    --os-shadow: rgba(0, 0, 0, 0.1);
+    --os-shadow-dark: rgba(0, 0, 0, 0.2);
+    
+    /* Taskbar Colors */
+    --taskbar-bg: rgba(225, 112, 85, 0.9);
+    --taskbar-bg-hover: rgba(255, 255, 255, 0.1);
+    --taskbar-bg-active: rgba(255, 255, 255, 0.2);
+    
+    /* Start Menu Colors */
+    --start-menu-bg: rgba(225, 112, 85, 0.95);
+    --start-menu-item-hover: rgba(255, 255, 255, 0.1);
+    
+    /* Window Colors */
+    --window-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Desktop Background */
+body.theme-sunset .desktop {
+    background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+}
+
+/* Theme-specific overrides */
+.sunset-theme .window {
+    background: #fff5f5;
+    border: 1px solid var(--os-border);
+    box-shadow: var(--window-shadow);
+    color: var(--os-text);
+}
+
+.sunset-theme .window-titlebar {
+    background: #ffeaa7;
+    border-bottom: 1px solid var(--os-border);
+}
+
+.sunset-theme .taskbar {
+    background: var(--taskbar-bg);
+}
+
+.sunset-theme .start-menu {
+    background: var(--start-menu-bg);
+}
+
+.sunset-theme .context-menu {
+    background: rgba(225, 112, 85, 0.97);
+    border: 1px solid var(--os-border);
+}
+
+.sunset-theme .context-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+} 

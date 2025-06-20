@@ -1,0 +1,54 @@
+/* Classic WebOS Theme - Blue Color Scheme */
+
+:root {
+    /* Primary Colors */
+    --os-bg: #0078d4;
+    --os-bg-dark: #106ebe;
+    --os-accent: #0078d4;
+    --os-accent-light: #40a9ff;
+    --os-accent-dark: #005a9e;
+    
+    /* Text Colors */
+    --os-text: #323130;
+    --os-text-secondary: #605e5c;
+    --os-text-light: #ffffff;
+    
+    /* Border Colors */
+    --os-border: #e1dfdd;
+    --os-border-light: #f3f2f1;
+    
+    /* Shadow Colors */
+    --os-shadow: rgba(0, 0, 0, 0.1);
+    --os-shadow-dark: rgba(0, 0, 0, 0.2);
+    
+    /* Taskbar Colors */
+    --taskbar-bg: rgba(0, 0, 0, 0.8);
+    --taskbar-bg-hover: rgba(255, 255, 255, 0.1);
+    --taskbar-bg-active: rgba(255, 255, 255, 0.2);
+    
+    /* Start Menu Colors */
+    --start-menu-bg: rgba(0, 0, 0, 0.9);
+    --start-menu-item-hover: rgba(255, 255, 255, 0.1);
+    
+    /* Window Colors */
+    --window-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Desktop Background */
+body.theme-classic .desktop {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Theme-specific overrides */
+.classic-theme .window {
+    border: 1px solid var(--os-border);
+    box-shadow: var(--window-shadow);
+}
+
+.classic-theme .taskbar {
+    background: var(--taskbar-bg);
+}
+
+.classic-theme .start-menu {
+    background: var(--start-menu-bg);
+} 

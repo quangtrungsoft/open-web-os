@@ -12,9 +12,27 @@ class DockSettingsProcessor {
     }
 
     open() {
+        // Check if a dock settings window is already open using window manager
+        if (window.windowManager) {
+            const allWindows = window.windowManager.getAllWindows();
+            for (const [windowId, windowData] of allWindows) {
+                if (windowData.data.title === this.appName) {
+                    // If window is minimized, restore it first
+                    if (windowData.isMinimized) {
+                        window.windowManager.restoreWindow(windowId);
+                    }
+                    // Focus the existing window instead of creating a new one
+                    window.windowManager.focusWindow(windowId);
+                    return;
+                }
+            }
+        }
+
         if (!this.templateLoader || !this.eventBus) return;
+        
         const windowId = `window-${this.appId}-${Date.now()}`;
         this.windowId = windowId;
+        
         this.templateLoader.loadTemplate('core/taskbar/dock-settings.html').then(windowContent => {
             this.eventBus.emit('createWindow', {
                 id: windowId,

@@ -1,0 +1,70 @@
+/* Ocean Theme - Deep Ocean Blues */
+
+:root {
+    /* Primary Colors */
+    --os-bg: #0984e3;
+    --os-bg-dark: #0652DD;
+    --os-accent: #0984e3;
+    --os-accent-light: #74b9ff;
+    --os-accent-dark: #0652DD;
+    
+    /* Text Colors */
+    --os-text: #ffffff;
+    --os-text-secondary: #b2bec3;
+    --os-text-light: #ffffff;
+    
+    /* Border Colors */
+    --os-border: #74b9ff;
+    --os-border-light: #a29bfe;
+    
+    /* Shadow Colors */
+    --os-shadow: rgba(0, 0, 0, 0.2);
+    --os-shadow-dark: rgba(0, 0, 0, 0.4);
+    
+    /* Taskbar Colors */
+    --taskbar-bg: rgba(9, 132, 227, 0.9);
+    --taskbar-bg-hover: rgba(255, 255, 255, 0.1);
+    --taskbar-bg-active: rgba(255, 255, 255, 0.2);
+    
+    /* Start Menu Colors */
+    --start-menu-bg: rgba(9, 132, 227, 0.95);
+    --start-menu-item-hover: rgba(255, 255, 255, 0.1);
+    
+    /* Window Colors */
+    --window-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Desktop Background */
+body.theme-ocean .desktop {
+    background: linear-gradient(135deg, #00cec9 0%, #0984e3 100%);
+}
+
+/* Theme-specific overrides */
+.ocean-theme .window {
+    background: #0c2461;
+    border: 1px solid var(--os-border);
+    box-shadow: var(--window-shadow);
+    color: var(--os-text);
+}
+
+.ocean-theme .window-titlebar {
+    background: #1e3799;
+    border-bottom: 1px solid var(--os-border);
+}
+
+.ocean-theme .taskbar {
+    background: var(--taskbar-bg);
+}
+
+.ocean-theme .start-menu {
+    background: var(--start-menu-bg);
+}
+
+.ocean-theme .context-menu {
+    background: rgba(9, 132, 227, 0.97);
+    border: 1px solid var(--os-border);
+}
+
+.ocean-theme .context-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+} 

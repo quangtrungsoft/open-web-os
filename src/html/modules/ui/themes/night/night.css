@@ -1,0 +1,71 @@
+/* Night Theme - Dark Color Scheme */
+
+:root {
+    /* Primary Colors */
+    --os-bg: #1a1a1a;
+    --os-bg-dark: #0d0d0d;
+    --os-accent: #0078d4;
+    --os-accent-light: #40a9ff;
+    --os-accent-dark: #005a9e;
+    
+    /* Text Colors */
+    --os-text: #ffffff;
+    --os-text-secondary: #cccccc;
+    --os-text-light: #ffffff;
+    
+    /* Border Colors */
+    --os-border: #404040;
+    --os-border-light: #2d2d2d;
+    
+    /* Shadow Colors */
+    --os-shadow: rgba(0, 0, 0, 0.3);
+    --os-shadow-dark: rgba(0, 0, 0, 0.5);
+    
+    /* Taskbar Colors */
+    --taskbar-bg: rgba(26, 26, 26, 0.9);
+    --taskbar-bg-hover: rgba(255, 255, 255, 0.1);
+    --taskbar-bg-active: rgba(255, 255, 255, 0.2);
+    
+    /* Start Menu Colors */
+    --start-menu-bg: rgba(26, 26, 26, 0.95);
+    --start-menu-item-hover: rgba(255, 255, 255, 0.1);
+    
+    /* Window Colors */
+    --window-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Desktop Background */
+body.theme-night .desktop {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+}
+
+/* Theme-specific overrides */
+.night-theme .window {
+    background: #1a1a1a;
+    border: 1px solid var(--os-border);
+    box-shadow: var(--window-shadow);
+    color: var(--os-text);
+}
+
+.night-theme .window-titlebar {
+    background: #2d2d2d;
+    border-bottom: 1px solid var(--os-border);
+}
+
+.night-theme .taskbar {
+    background: var(--taskbar-bg);
+}
+
+.night-theme .start-menu {
+    background: var(--start-menu-bg);
+}
+
+.night-theme .context-menu {
+    background: #2d2d2d;
+    border: 1px solid var(--os-border);
+    color: var(--os-text);
+}
+
+.night-theme .context-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+} 

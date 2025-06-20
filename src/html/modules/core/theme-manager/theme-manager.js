@@ -1,14 +1,16 @@
 /**
  * WebOS - Theme Manager
- * Handles theme switching and management
+ * Handles theme switching and management with dynamic loading support
  */
 
 class ThemeManager {
     constructor() {
         this.currentTheme = 'classic';
         this.themes = new Map();
+        this.themeInstances = new Map(); // Store theme class instances
         this.eventBus = null;
         this.isInitialized = false;
+        this.currentStylesheet = null;
         
         // Initialize default themes
         this.initializeDefaultThemes();
@@ -42,145 +44,45 @@ class ThemeManager {
         this.addTheme('classic', {
             name: 'Classic',
             description: 'Classic WebOS blue theme',
-            colors: {
-                '--os-bg': '#0078d4',
-                '--os-bg-dark': '#106ebe',
-                '--os-accent': '#0078d4',
-                '--os-accent-light': '#40a9ff',
-                '--os-accent-dark': '#005a9e',
-                '--os-text': '#323130',
-                '--os-text-secondary': '#605e5c',
-                '--os-text-light': '#ffffff',
-                '--os-border': '#e1dfdd',
-                '--os-border-light': '#f3f2f1',
-                '--os-shadow': 'rgba(0, 0, 0, 0.1)',
-                '--os-shadow-dark': 'rgba(0, 0, 0, 0.2)',
-                '--taskbar-bg': 'rgba(0, 0, 0, 0.8)',
-                '--taskbar-bg-hover': 'rgba(255, 255, 255, 0.1)',
-                '--taskbar-bg-active': 'rgba(255, 255, 255, 0.2)',
-                '--start-menu-bg': 'rgba(0, 0, 0, 0.9)',
-                '--start-menu-item-hover': 'rgba(255, 255, 255, 0.1)',
-                '--window-shadow': '0 4px 20px rgba(0, 0, 0, 0.3)'
-            },
-            desktop: {
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-            }
+            class: 'ClassicTheme',
+            cssPath: 'modules/ui/themes/classic/classic.css',
+            jsPath: 'modules/ui/themes/classic/classic.js'
         });
 
         // Night Theme
         this.addTheme('night', {
             name: 'Night',
             description: 'Modern dark theme for better eye comfort',
-            colors: {
-                '--os-bg': '#1a1a1a',
-                '--os-bg-dark': '#0d0d0d',
-                '--os-accent': '#0078d4',
-                '--os-accent-light': '#40a9ff',
-                '--os-accent-dark': '#005a9e',
-                '--os-text': '#ffffff',
-                '--os-text-secondary': '#cccccc',
-                '--os-text-light': '#ffffff',
-                '--os-border': '#404040',
-                '--os-border-light': '#2d2d2d',
-                '--os-shadow': 'rgba(0, 0, 0, 0.3)',
-                '--os-shadow-dark': 'rgba(0, 0, 0, 0.5)',
-                '--taskbar-bg': 'rgba(26, 26, 26, 0.9)',
-                '--taskbar-bg-hover': 'rgba(255, 255, 255, 0.1)',
-                '--taskbar-bg-active': 'rgba(255, 255, 255, 0.2)',
-                '--start-menu-bg': 'rgba(26, 26, 26, 0.95)',
-                '--start-menu-item-hover': 'rgba(255, 255, 255, 0.1)',
-                '--window-shadow': '0 4px 20px rgba(0, 0, 0, 0.5)'
-            },
-            desktop: {
-                background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)'
-            }
+            class: 'NightTheme',
+            cssPath: 'modules/ui/themes/night/night.css',
+            jsPath: 'modules/ui/themes/night/night.js'
         });
 
         // Professional Theme
         this.addTheme('professional', {
             name: 'Professional',
             description: 'Clean and bright professional theme',
-            colors: {
-                '--os-bg': '#ffffff',
-                '--os-bg-dark': '#f5f5f5',
-                '--os-accent': '#0078d4',
-                '--os-accent-light': '#40a9ff',
-                '--os-accent-dark': '#005a9e',
-                '--os-text': '#000000',
-                '--os-text-secondary': '#666666',
-                '--os-text-light': '#ffffff',
-                '--os-border': '#e0e0e0',
-                '--os-border-light': '#f0f0f0',
-                '--os-shadow': 'rgba(0, 0, 0, 0.1)',
-                '--os-shadow-dark': 'rgba(0, 0, 0, 0.2)',
-                '--taskbar-bg': 'rgba(255, 255, 255, 0.9)',
-                '--taskbar-bg-hover': 'rgba(0, 0, 0, 0.1)',
-                '--taskbar-bg-active': 'rgba(0, 0, 0, 0.2)',
-                '--start-menu-bg': 'rgba(255, 255, 255, 0.95)',
-                '--start-menu-item-hover': 'rgba(0, 0, 0, 0.1)',
-                '--window-shadow': '0 4px 20px rgba(0, 0, 0, 0.2)'
-            },
-            desktop: {
-                background: 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)'
-            }
+            class: 'ProfessionalTheme',
+            cssPath: 'modules/ui/themes/professional/professional.css',
+            jsPath: 'modules/ui/themes/professional/professional.js'
         });
 
         // Sunset Theme
         this.addTheme('sunset', {
             name: 'Sunset',
             description: 'Warm sunset colors',
-            colors: {
-                '--os-bg': '#e17055',
-                '--os-bg-dark': '#d63031',
-                '--os-accent': '#e17055',
-                '--os-accent-light': '#fab1a0',
-                '--os-accent-dark': '#d63031',
-                '--os-text': '#2d3436',
-                '--os-text-secondary': '#636e72',
-                '--os-text-light': '#ffffff',
-                '--os-border': '#fdcb6e',
-                '--os-border-light': '#ffeaa7',
-                '--os-shadow': 'rgba(0, 0, 0, 0.1)',
-                '--os-shadow-dark': 'rgba(0, 0, 0, 0.2)',
-                '--taskbar-bg': 'rgba(225, 112, 85, 0.9)',
-                '--taskbar-bg-hover': 'rgba(255, 255, 255, 0.1)',
-                '--taskbar-bg-active': 'rgba(255, 255, 255, 0.2)',
-                '--start-menu-bg': 'rgba(225, 112, 85, 0.95)',
-                '--start-menu-item-hover': 'rgba(255, 255, 255, 0.1)',
-                '--window-shadow': '0 4px 20px rgba(0, 0, 0, 0.3)'
-            },
-            desktop: {
-                background: 'linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%)'
-            }
+            class: 'SunsetTheme',
+            cssPath: 'modules/ui/themes/sunset/sunset.css',
+            jsPath: 'modules/ui/themes/sunset/sunset.js'
         });
 
         // Ocean Theme
         this.addTheme('ocean', {
             name: 'Ocean',
             description: 'Deep ocean blues',
-            colors: {
-                '--os-bg': '#0984e3',
-                '--os-bg-dark': '#0652DD',
-                '--os-accent': '#0984e3',
-                '--os-accent-light': '#74b9ff',
-                '--os-accent-dark': '#0652DD',
-                '--os-text': '#ffffff',
-                '--os-text-secondary': '#b2bec3',
-                '--os-text-light': '#ffffff',
-                '--os-border': '#74b9ff',
-                '--os-border-light': '#a29bfe',
-                '--os-shadow': 'rgba(0, 0, 0, 0.2)',
-                '--os-shadow-dark': 'rgba(0, 0, 0, 0.4)',
-                '--taskbar-bg': 'rgba(9, 132, 227, 0.9)',
-                '--taskbar-bg-hover': 'rgba(255, 255, 255, 0.1)',
-                '--taskbar-bg-active': 'rgba(255, 255, 255, 0.2)',
-                '--start-menu-bg': 'rgba(9, 132, 227, 0.95)',
-                '--start-menu-item-hover': 'rgba(255, 255, 255, 0.1)',
-                '--window-shadow': '0 4px 20px rgba(0, 0, 0, 0.4)'
-            },
-            desktop: {
-                background: 'linear-gradient(135deg, #00cec9 0%, #0984e3 100%)'
-            }
+            class: 'OceanTheme',
+            cssPath: 'modules/ui/themes/ocean/ocean.css',
+            jsPath: 'modules/ui/themes/ocean/ocean.js'
         });
     }
 
@@ -223,48 +125,156 @@ class ThemeManager {
     }
 
     /**
-     * Apply a theme
+     * Get current theme instance
+     * @returns {Object|null} Current theme instance or null
+     */
+    getCurrentThemeInstance() {
+        return this.themeInstances.get(this.currentTheme) || null;
+    }
+
+    /**
+     * Load and apply a theme with dynamic loading support
      * @param {string} themeId - Theme identifier
      */
-    applyTheme(themeId) {
+    async applyTheme(themeId) {
         const theme = this.getTheme(themeId);
         if (!theme) {
             console.error(`Theme not found: ${themeId}`);
             return false;
         }
 
-        // Apply CSS custom properties
-        const root = document.documentElement;
-        
-        // Apply color variables
-        Object.entries(theme.colors).forEach(([property, value]) => {
-            root.style.setProperty(property, value);
-        });
+        try {
+            console.log(`Applying theme: ${theme.name}`);
 
-        // Apply desktop background
-        if (theme.desktop && theme.desktop.background) {
-            const desktop = document.querySelector('.desktop');
-            if (desktop) {
-                desktop.style.background = theme.desktop.background;
+            // Remove current theme's assets
+            await this.removeCurrentThemeAssets();
+
+            // Load new theme's stylesheet
+            if (theme.cssPath) {
+                this.loadStylesheet(theme.cssPath);
+            }
+
+            // Try to load and apply theme class if available
+            if (theme.class && theme.jsPath) {
+                await this.loadAndApplyThemeClass(theme);
+            }
+
+            // Update current theme
+            this.currentTheme = themeId;
+            
+            // Save to localStorage
+            this.saveTheme();
+            
+            // Emit theme changed event
+            if (this.eventBus) {
+                this.eventBus.emit('themeChanged', {
+                    themeId,
+                    theme: theme,
+                    instance: this.themeInstances.get(themeId)
+                });
+            }
+
+            console.log(`Theme applied successfully: ${theme.name}`);
+            return true;
+
+        } catch (error) {
+            console.error(`Failed to apply theme ${themeId}:`, error);
+            return false;
+        }
+    }
+
+    /**
+     * Load theme stylesheet
+     * @param {string} cssPath - Path to theme stylesheet
+     */
+    loadStylesheet(cssPath) {
+        if (this.currentStylesheet) {
+            this.currentStylesheet.remove();
+        }
+
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = cssPath;
+        
+        this.currentStylesheet = link;
+        document.head.appendChild(link);
+    }
+
+    /**
+     * Load and apply theme class
+     * @param {Object} theme - Theme configuration
+     */
+    async loadAndApplyThemeClass(theme) {
+        try {
+            // Check if theme class is already available
+            const ThemeClass = window[theme.class];
+            
+            if (!ThemeClass) {
+                // Try to load theme script dynamically
+                await this.loadThemeScript(theme.jsPath);
+                
+                // Check again after loading
+                const LoadedThemeClass = window[theme.class];
+                if (!LoadedThemeClass) {
+                    throw new Error(`Theme class not found: ${theme.class}`);
+                }
+            }
+
+            // Create theme instance
+            const themeInstance = new window[theme.class]();
+            this.themeInstances.set(theme.id, themeInstance);
+
+            // Apply theme
+            if (typeof themeInstance.apply === 'function') {
+                themeInstance.apply();
+            } else if (typeof themeInstance.init === 'function') {
+                themeInstance.init();
+            }
+
+            console.log(`Theme class loaded and applied: ${theme.class}`);
+
+        } catch (error) {
+            console.warn(`Failed to load theme class for ${theme.id}:`, error);
+            // Continue with basic theme application
+        }
+    }
+
+    /**
+     * Load theme script dynamically
+     * @param {string} scriptPath - Path to theme script
+     */
+    async loadThemeScript(scriptPath) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = scriptPath;
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error(`Failed to load script: ${scriptPath}`));
+            document.head.appendChild(script);
+        });
+    }
+
+    /**
+     * Remove current theme's assets (instance and stylesheet)
+     */
+    async removeCurrentThemeAssets() {
+        // Remove theme instance
+        const currentInstance = this.themeInstances.get(this.currentTheme);
+        if (currentInstance && typeof currentInstance.remove === 'function') {
+            try {
+                currentInstance.remove();
+                console.log(`Removed theme instance: ${this.currentTheme}`);
+            } catch (error) {
+                console.warn(`Failed to remove theme instance: ${this.currentTheme}`, error);
             }
         }
+        this.themeInstances.delete(this.currentTheme);
 
-        // Update current theme
-        this.currentTheme = themeId;
-        
-        // Save to localStorage
-        this.saveTheme();
-        
-        // Emit theme changed event
-        if (this.eventBus) {
-            this.eventBus.emit('themeChanged', {
-                themeId,
-                theme: theme
-            });
+        // Remove stylesheet
+        if (this.currentStylesheet) {
+            this.currentStylesheet.remove();
+            this.currentStylesheet = null;
         }
-
-        console.log(`Theme applied: ${theme.name}`);
-        return true;
     }
 
     /**
@@ -312,6 +322,14 @@ class ThemeManager {
                 currentTheme: this.currentTheme
             });
         });
+
+        // Listen for theme info requests
+        this.eventBus.on('getCurrentTheme', () => {
+            this.eventBus.emit('currentThemeInfo', {
+                theme: this.getCurrentTheme(),
+                instance: this.getCurrentThemeInstance()
+            });
+        });
     }
 
     /**
@@ -322,16 +340,34 @@ class ThemeManager {
         return {
             totalThemes: this.themes.size,
             currentTheme: this.currentTheme,
-            availableThemes: Array.from(this.themes.keys())
+            availableThemes: Array.from(this.themes.keys()),
+            themeInstances: Array.from(this.themeInstances.keys())
         };
     }
 
     /**
      * Cleanup resources
      */
-    destroy() {
+    async destroy() {
+        // Remove all theme instances
+        for (const [themeId, instance] of this.themeInstances) {
+            if (typeof instance.remove === 'function') {
+                try {
+                    instance.remove();
+                } catch (error) {
+                    console.warn(`Failed to remove theme instance: ${themeId}`, error);
+                }
+            }
+        }
+
         this.themes.clear();
+        this.themeInstances.clear();
         this.isInitialized = false;
+
+        if (this.currentStylesheet) {
+            this.currentStylesheet.remove();
+        }
+
         console.log('Theme Manager destroyed');
     }
 }

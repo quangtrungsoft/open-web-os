@@ -96,7 +96,12 @@ class ModuleLoader {
         
         if (config.contextMenu) {
             await this.loadModule('ContextMenu', () => {
+                const dependencies = {
+                    eventBus: window.eventBus,
+                    themeManager: window.themeManager
+                };
                 window.contextMenu = new ContextMenu();
+                window.contextMenu.init(dependencies);
                 return window.contextMenu;
             });
         }
