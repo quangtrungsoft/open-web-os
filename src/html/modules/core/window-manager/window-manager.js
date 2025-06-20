@@ -280,6 +280,24 @@ class WindowManager {
                 this.closeWindow(windowId);
             });
         }
+
+        // Double-click titlebar to toggle maximize/restore/minimize
+        const titlebar = element.querySelector('.window-titlebar');
+        if (titlebar) {
+            titlebar.addEventListener('dblclick', (e) => {
+                // Ignore if double-clicking on controls
+                if (e.target.closest('.window-control')) return;
+                const windowData = this.windows.get(windowId);
+                if (!windowData) return;
+                if (windowData.isMinimized) {
+                    this.restoreWindow(windowId);
+                } else if (windowData.isMaximized) {
+                    this.maximizeWindow(windowId); // This will restore
+                } else {
+                    this.maximizeWindow(windowId);
+                }
+            });
+        }
     }
 
     /**
@@ -435,7 +453,17 @@ class WindowManager {
         const windowData = this.windows.get(windowId);
         if (!windowData) return;
 
-        windowData.element.style.display = 'none';
+        // Animate minimize (scale down and fade out)
+        const el = windowData.element;
+        el.style.transition = 'transform 0.22s cubic-bezier(.4,0,.2,1), opacity 0.18s cubic-bezier(.4,0,.2,1)';
+        el.style.transform = 'scale(0.85) translateY(40px)';
+        el.style.opacity = '0';
+        setTimeout(() => {
+            el.style.display = 'none';
+            el.style.transform = '';
+            el.style.opacity = '';
+            el.style.transition = '';
+        }, 180);
         windowData.isMinimized = true;
 
         // Emit window minimized event
@@ -450,7 +478,20 @@ class WindowManager {
         const windowData = this.windows.get(windowId);
         if (!windowData) return;
 
-        windowData.element.style.display = 'block';
+        const el = windowData.element;
+        el.style.display = 'block';
+        el.style.opacity = '0';
+        el.style.transform = 'scale(0.85) translateY(40px)';
+        el.style.transition = 'transform 0.22s cubic-bezier(.4,0,.2,1), opacity 0.18s cubic-bezier(.4,0,.2,1)';
+        setTimeout(() => {
+            el.style.opacity = '1';
+            el.style.transform = 'scale(1) translateY(0)';
+        }, 10);
+        setTimeout(() => {
+            el.style.transition = '';
+            el.style.transform = '';
+            el.style.opacity = '';
+        }, 250);
         windowData.isMinimized = false;
 
         // Ensure window content can scroll properly
@@ -477,45 +518,92 @@ class WindowManager {
         const windowData = this.windows.get(windowId);
         if (!windowData) return;
 
+        const el = windowData.element;
+        el.style.transition = 'all 0.38s cubic-bezier(.4,0,.2,1), box-shadow 0.28s cubic-bezier(.4,0,.2,1)';
         if (windowData.isMaximized) {
-            // Restore window
-            windowData.element.style.width = windowData.originalSize.width;
-            windowData.element.style.height = windowData.originalSize.height;
-            windowData.element.style.left = windowData.originalPosition.left;
-            windowData.element.style.top = windowData.originalPosition.top;
+            // FLIP animation for restore
+            const first = el.getBoundingClientRect();
+            // Set final state
+            el.style.width = windowData.originalSize.width;
+            el.style.height = windowData.originalSize.height;
+            el.style.left = windowData.originalPosition.left;
+            el.style.top = windowData.originalPosition.top;
+            el.classList.remove('maximized');
+            // Force reflow to apply final state
+            const last = el.getBoundingClientRect();
+            // Invert
+            const dx = first.left - last.left;
+            const dy = first.top - last.top;
+            const dw = first.width / last.width;
+            const dh = first.height / last.height;
+            el.style.transform = `translate(${dx}px, ${dy}px) scale(${dw}, ${dh})`;
+            el.style.transition = 'none';
+            // Force reflow
+            el.offsetWidth;
+            // Play
+            requestAnimationFrame(() => {
+                el.style.transition = 'transform 0.38s cubic-bezier(.4,0,.2,1), box-shadow 0.28s cubic-bezier(.4,0,.2,1)';
+                el.style.boxShadow = '0 0 32px 0 rgba(0,255,208,0.18), 0 2px 16px 0 rgba(0,255,208,0.08)';
+                el.style.transform = 'none';
+            });
+            setTimeout(() => {
+                el.style.transition = '';
+                el.style.transform = '';
+                el.style.boxShadow = '';
+            }, 400);
             windowData.isMaximized = false;
-            
             // Ensure window content can scroll properly after restore
-            const windowContent = windowData.element.querySelector('.window-content');
+            const windowContent = el.querySelector('.window-content');
             if (windowContent) {
-                // Force a reflow to ensure proper sizing
                 windowContent.style.height = 'auto';
-                windowContent.offsetHeight; // Force reflow
+                windowContent.offsetHeight;
                 windowContent.style.maxHeight = `calc(100% - ${getComputedStyle(document.documentElement).getPropertyValue('--window-titlebar-height') || '32px'})`;
             }
         } else {
             // Save original size and position
             windowData.originalSize = {
-                width: windowData.element.style.width,
-                height: windowData.element.style.height
+                width: el.style.width,
+                height: el.style.height
             };
             windowData.originalPosition = {
-                left: windowData.element.style.left,
-                top: windowData.element.style.top
+                left: el.style.left,
+                top: el.style.top
             };
-
             // Get taskbar height (default 40px if not available)
             const taskbarHeight = getComputedStyle(document.documentElement)
                 .getPropertyValue('--taskbar-height') || '40px';
-
-            // Maximize window (accounting for taskbar)
-            windowData.element.style.width = '100%';
-            windowData.element.style.height = `calc(100% - ${taskbarHeight})`;
-            windowData.element.style.left = '0';
-            windowData.element.style.top = '0';
+            // FLIP animation for maximize
+            const first = el.getBoundingClientRect();
+            // Set final state
+            el.style.width = '100%';
+            el.style.height = `calc(100% - ${taskbarHeight})`;
+            el.style.left = '0';
+            el.style.top = '0';
+            el.classList.add('maximized');
+            // Force reflow to apply final state
+            const last = el.getBoundingClientRect();
+            // Invert
+            const dx = first.left - last.left;
+            const dy = first.top - last.top;
+            const dw = first.width / last.width;
+            const dh = first.height / last.height;
+            el.style.transform = `translate(${dx}px, ${dy}px) scale(${dw}, ${dh})`;
+            el.style.transition = 'none';
+            // Force reflow
+            el.offsetWidth;
+            // Play
+            requestAnimationFrame(() => {
+                el.style.transition = 'transform 0.38s cubic-bezier(.4,0,.2,1), box-shadow 0.28s cubic-bezier(.4,0,.2,1)';
+                el.style.boxShadow = '0 0 32px 0 rgba(0,255,208,0.18), 0 2px 16px 0 rgba(0,255,208,0.08)';
+                el.style.transform = 'none';
+            });
+            setTimeout(() => {
+                el.style.transition = '';
+                el.style.transform = '';
+                el.style.boxShadow = '';
+            }, 400);
             windowData.isMaximized = true;
         }
-
         // Focus the window
         this.focusWindow(windowId);
     }
