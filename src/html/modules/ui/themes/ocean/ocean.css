@@ -32,6 +32,17 @@
     
     /* Window Colors */
     --window-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    
+    /* Scrollbar Colors */
+    --scrollbar-track-color: #b2bec3;
+    --scrollbar-thumb-color: #0984e3;
+    --scrollbar-thumb-hover-color: #0652DD;
+
+    /* Link Colors */
+    --link-color: #00cec9;
+    --link-hover-color: #74b9ff;
+    --link-active-color: #0652DD;
+    --link-visited-color: #b2bec3;
 }
 
 /* Desktop Background */

@@ -32,12 +32,23 @@
   --z-start-menu: 200;
   --z-context-menu: 300;
   --z-modal: 400;
+  --scrollbar-width: 12px;
+  --scrollbar-track-color: #f0f0f0;
+  --scrollbar-thumb-color: #b0b0b0;
+  --scrollbar-thumb-hover-color: #888;
+  --scrollbar-thumb-radius: 8px;
+  --link-color: var(--os-accent);
+  --link-hover-color: var(--os-accent-light);
+  --link-active-color: var(--os-accent-dark);
+  --link-visited-color: #6c63ff;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
 }
 
 body {
@@ -1121,4 +1132,52 @@ body {
 .dock-item.dock-pinned {
     opacity: 1;
     border-bottom: 2px solid #f9d923;
+}
+
+/* Modern, themeable scrollbar styles */
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+  border-radius: var(--scrollbar-thumb-radius);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color);
+  border-radius: var(--scrollbar-thumb-radius);
+  transition: background 0.2s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-color);
+}
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+}
+
+/* Hide scrollbar arrows (buttons) for Webkit browsers */
+::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+/* Global link styles */
+a {
+  color: var(--link-color);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover, a:focus {
+  color: var(--link-hover-color);
+  text-decoration: none;
+}
+a:active {
+  color: var(--link-active-color);
+}
+a:visited {
+  color: var(--link-visited-color);
 } 

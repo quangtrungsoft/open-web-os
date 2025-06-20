@@ -19,6 +19,9 @@
     --start-menu-bg: rgba(10, 10, 10, 0.99);
     --start-menu-item-hover: rgba(29, 185, 84, 0.08);
     --window-shadow: 0 4px 24px rgba(0,0,0,0.8);
+    --scrollbar-track-color: #181818;
+    --scrollbar-thumb-color: #333;
+    --scrollbar-thumb-hover-color: #444;
 }
 
 body.theme-darknight .desktop {
