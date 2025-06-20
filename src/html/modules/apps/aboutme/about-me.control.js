@@ -23,6 +23,7 @@ class AboutMeControl {
         
         this.bindEvents();
         this.setupAnimations();
+        this.setupBookingMenu();
         this.isInitialized = true;
         
         console.log('About Me Control initialized');
@@ -253,7 +254,115 @@ class AboutMeControl {
         this.isInitialized = false;
         console.log('About Me Control destroyed');
     }
+
+    /**
+     * Setup booking menu toggle and label hover
+     */
+    setupBookingMenu() {
+        const bookingMenu = this.windowElement.querySelector('.booking-menu');
+        const bookingToggle = this.windowElement.querySelector('.booking-toggle');
+        if (bookingToggle && bookingMenu) {
+            bookingToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                bookingMenu.classList.toggle('open');
+            });
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!bookingMenu.contains(e.target)) {
+                    bookingMenu.classList.remove('open');
+                }
+            });
+        }
+        // Show label on focus for accessibility
+        this.windowElement.querySelectorAll('.booking-action').forEach(btn => {
+            btn.addEventListener('focus', function() {
+                btn.classList.add('focus');
+            });
+            btn.addEventListener('blur', function() {
+                btn.classList.remove('focus');
+            });
+        });
+    }
 }
 
 // Export the control class
-window.AboutMeControl = AboutMeControl; 
+window.AboutMeControl = AboutMeControl;
+
+document.addEventListener('DOMContentLoaded', function() {
+  const projects = {
+    breadmaster: {
+      title: 'BreadMaster',
+      description: 'A web app for tracking and sharing artisan bread recipes. Features timers, hydration calculators, and a community recipe book.',
+      links: [
+        { label: 'GitHub', url: 'https://github.com/johndoe/breadmaster' },
+        { label: 'Live Demo', url: '#' }
+      ]
+    },
+    erpify: {
+      title: 'ERPify',
+      description: 'A modular ERP system for small businesses. Includes inventory, sales, HR, and analytics modules.',
+      links: [
+        { label: 'GitHub', url: 'https://github.com/johndoe/erpify' }
+      ]
+    },
+    recipeshare: {
+      title: 'RecipeShare',
+      description: 'A social platform for sharing and discovering recipes. Features user profiles, ratings, and photo uploads.',
+      links: [
+        { label: 'GitHub', url: 'https://github.com/johndoe/recipeshare' },
+        { label: 'Live Demo', url: '#' }
+      ]
+    },
+    taskflow: {
+      title: 'TaskFlow',
+      description: 'A productivity app for managing daily tasks and habits. Includes reminders, analytics, and motivational badges.',
+      links: [
+        { label: 'GitHub', url: 'https://github.com/johndoe/taskflow' }
+      ]
+    },
+    bakecam: {
+      title: 'BakeCam',
+      description: 'A smart camera app for monitoring bread proofing and baking. Uses AI to detect optimal proofing and baking times.',
+      links: [
+        { label: 'GitHub', url: 'https://github.com/johndoe/bakecam' }
+      ]
+    }
+  };
+
+  const modal = document.getElementById('project-modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalDescription = document.getElementById('modal-description');
+  const modalLinks = document.getElementById('modal-links');
+  const modalClose = document.querySelector('.aboutme-project-modal-close');
+
+  document.querySelectorAll('.aboutme-project-card').forEach(card => {
+    card.addEventListener('click', function() {
+      const key = card.getAttribute('data-project');
+      const info = projects[key];
+      if (info) {
+        modalTitle.textContent = info.title;
+        modalDescription.textContent = info.description;
+        modalLinks.innerHTML = '';
+        info.links.forEach(link => {
+          const a = document.createElement('a');
+          a.href = link.url;
+          a.textContent = link.label;
+          a.target = '_blank';
+          a.style.marginRight = '1em';
+          modalLinks.appendChild(a);
+        });
+        modal.style.display = 'block';
+      }
+    });
+  });
+
+  modalClose.addEventListener('click', function() {
+    modal.style.display = 'none';
+  });
+
+  window.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+}); 

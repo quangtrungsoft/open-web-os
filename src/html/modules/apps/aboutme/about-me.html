@@ -1,49 +1,76 @@
-<div class="about-me-content">
-    <div class="about-header">
-        <div class="about-avatar">
-            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMDA3OGQ0Ii8+CjxjaXJjbGUgY3g9IjUwIiBjeT0iMzUiIHI9IjE1IiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTUgNzBDMTUgNjAgMjUgNTAgMzUgNTBINjVDNzUgNTAgODUgNjAgODUgNzBWODVIMTVWNzBaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K" alt="Avatar">
-        </div>
-        <div class="about-info">
-            <h2>Vũ Quang Trung</h2>
-            <p class="title">Software Developer & Creator</p>
-            <p>Creator of this WebOS and various software projects.</p>
-        </div>
+<link rel="stylesheet" href="modules/apps/aboutme/about-me.css" />
+<div class="summary-window">
+  <div class="summary-header">
+    <div class="summary-header-main">
+      <img class="summary-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="John Doe" />
+      <h1>John Doe</h1>
+      <p class="summary-tagline">Full Stack Developer &amp; Baking Pro</p>
+      <div class="summary-best">I am the <span>best</span> at what I do.</div>
     </div>
-    
-    <div class="about-details">
-        <h3>About Me</h3>
-        <p>Passionate software developer with expertise in web technologies, desktop applications, and system architecture. Dedicated to creating innovative solutions and user-friendly experiences.</p>
-        
-        <h3>Skills</h3>
-        <ul class="skills-list">
-            <li>JavaScript (ES6+)</li>
-            <li>HTML5 & CSS3</li>
-            <li>React & Vue.js</li>
-            <li>Node.js</li>
-            <li>Python</li>
-            <li>C# & .NET</li>
-            <li>Database Design</li>
-            <li>UI/UX Design</li>
-        </ul>
-        
-        <h3>Projects</h3>
-        <ul class="projects-list">
-            <li>WebOS</li>
-            <li>E-commerce Platforms</li>
-            <li>Mobile Applications</li>
-            <li>Web Services & APIs</li>
-            <li>Desktop Applications</li>
-        </ul>
-        
-        <h3>Contact</h3>
-        <div class="contact-info">
-            <p><strong>Email:</strong> trungvu.evolution@gmail.com</p>
-            <p><strong>Website:</strong> <a href="https://vuquangtrung.io.vn" target="_blank">vuquangtrung.io.vn</a></p>
-            <p><strong>GitHub:</strong> <a href="https://github.com/quangtrungsoft" target="_blank">github.com/quangtrungsoft</a></p>
-        </div>
+  </div>
+
+  <div class="summary-projects">
+    <h2>Project Highlights</h2>
+    <div class="summary-project-list">
+      <div class="summary-project-card">
+        <h3>BreadMaster</h3>
+        <p>Artisan bread recipe tracker and community.</p>
+      </div>
+      <div class="summary-project-card">
+        <h3>ERPify</h3>
+        <p>Modular ERP system for small businesses.</p>
+      </div>
+      <div class="summary-project-card">
+        <h3>RecipeShare</h3>
+        <p>Social platform for sharing and discovering recipes.</p>
+      </div>
+      <div class="summary-project-card">
+        <h3>TaskFlow</h3>
+        <p>Productivity app for managing daily tasks and habits.</p>
+      </div>
+      <div class="summary-project-card">
+        <h3>BakeCam</h3>
+        <p>Smart camera app for monitoring bread proofing and baking.</p>
+      </div>
     </div>
-    
-    <div class="about-footer">
-        <p>&copy; 2025 Vũ Quang Trung. All rights reserved.</p>
+  </div>
+
+  <div class="summary-contact">
+    <h2>Contact Me</h2>
+    <ul>
+      <li><strong>Email:</strong> sample@email.com</li>
+      <li><strong>Phone:</strong> +123456789</li>
+      <li><strong>LinkedIn:</strong> johndoe</li>
+      <li><strong>GitHub:</strong> johndoe</li>
+    </ul>
+  </div>
+
+  <!-- Floating Booking Menu -->
+  <div class="booking-menu">
+    <button class="booking-toggle" title="Book Me">
+      <span class="icon-calendar">📅</span>
+    </button>
+    <div class="booking-actions">
+      <button class="booking-action" data-action="cv" title="Download CV">
+        <span class="booking-label">Download CV</span>
+        <span class="booking-icon"><span class="icon-download">⬇️</span></span>
+      </button>
+      <button class="booking-action" data-action="feedback" title="Send Feedback Letter">
+        <span class="booking-label">Send Feedback Letter</span>
+        <span class="booking-icon"><span class="icon-mail">✉️</span></span>
+      </button>
+      <button class="booking-action" data-action="callback" title="Request a Callback">
+        <span class="booking-label">Request a Callback</span>
+        <span class="booking-icon"><span class="icon-phone">📞</span></span>
+      </button>
+      <button class="booking-action" data-action="dev" title="Request Development">
+        <span class="booking-label">Request Development</span>
+        <span class="booking-icon"><span class="icon-code">💻</span></span>
+      </button>
+      <button class="booking-action" data-action="consult" title="Schedule a Consultation">
+        <span class="booking-label">Schedule a Consultation</span>
+        <span class="booking-icon"><span class="icon-calendar-check">🗓️</span></span>
+      </button>
     </div>
+  </div>
 </div> 

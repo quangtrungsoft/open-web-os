@@ -80,8 +80,9 @@ class AboutMeProcessor {
             }
             
             // Create window configuration
+            const windowId = 'about-me-' + Date.now();
             const windowConfig = {
-                id: 'about-me-' + Date.now(),
+                id: windowId,
                 title: 'About Me',
                 icon: '👤',
                 content: template,
@@ -98,6 +99,11 @@ class AboutMeProcessor {
                         'Web Services & APIs',
                         'Desktop Applications'
                     ]
+                },
+                onWindowCreated: (windowElement) => {
+                    if (!windowElement) return;
+                    if (!window.aboutMeControl) window.aboutMeControl = new AboutMeControl(this);
+                    window.aboutMeControl.init(windowId, windowElement);
                 }
             };
             
