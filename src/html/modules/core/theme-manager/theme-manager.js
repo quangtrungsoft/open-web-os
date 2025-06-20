@@ -84,6 +84,15 @@ class ThemeManager {
             cssPath: 'modules/ui/themes/ocean/ocean.css',
             jsPath: 'modules/ui/themes/ocean/ocean.js'
         });
+
+        // Dark Night Theme
+        this.addTheme('darknight', {
+            name: 'Dark Night',
+            description: 'Super dark, eye-shielding theme',
+            class: 'DarkNightTheme',
+            cssPath: 'modules/ui/themes/darknight/darknight.css',
+            jsPath: 'modules/ui/themes/darknight/darknight.js'
+        });
     }
 
     /**

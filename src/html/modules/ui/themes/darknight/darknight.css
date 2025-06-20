@@ -1,0 +1,26 @@
+/* Dark Night Theme - Super Dark, Eye Shield */
+
+:root {
+    --os-bg: #101010;
+    --os-bg-dark: #070707;
+    --os-accent: #1db954; /* Gentle green accent */
+    --os-accent-light: #25e86a;
+    --os-accent-dark: #12803a;
+    --os-text: #e0e0e0;
+    --os-text-secondary: #888888;
+    --os-text-light: #ffffff;
+    --os-border: #222222;
+    --os-border-light: #333333;
+    --os-shadow: rgba(0, 0, 0, 0.7);
+    --os-shadow-dark: rgba(0, 0, 0, 0.9);
+    --taskbar-bg: rgba(10, 10, 10, 0.98);
+    --taskbar-bg-hover: rgba(29, 185, 84, 0.08);
+    --taskbar-bg-active: rgba(29, 185, 84, 0.15);
+    --start-menu-bg: rgba(10, 10, 10, 0.99);
+    --start-menu-item-hover: rgba(29, 185, 84, 0.08);
+    --window-shadow: 0 4px 24px rgba(0,0,0,0.8);
+}
+
+body.theme-darknight .desktop {
+    background: linear-gradient(135deg, #181818 0%, #101010 100%);
+} 
