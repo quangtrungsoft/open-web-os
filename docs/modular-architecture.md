@@ -34,10 +34,10 @@ modules/
 │   │   ├── calculator.html       # UI template
 │   │   ├── calculator.control.js # UI logic
 │   │   └── calculator.processor.js # Business logic
-│   └── notepad/                   # Notepad app
-│       ├── notepad.html          # UI template
-│       ├── notepad.control.js    # UI logic
-│       └── notepad.processor.js  # Business logic
+│   ├── notepad/                   # Notepad app
+│   │   ├── notepad.html          # UI template
+│   │   ├── notepad.control.js    # UI logic
+│   │   └── notepad.processor.js  # Business logic
 │
 ├── core/                          # Core system modules
 │   ├── template-loader/           # Template loading system
@@ -47,7 +47,9 @@ modules/
 │   ├── window-manager/            # Window management system
 │   │   └── window-manager.js
 │   ├── taskbar/                   # Taskbar functionality
-│   │   └── taskbar.js
+│   │   ├── taskbar.js
+│   │   ├── dock-settings.html     # Dock settings system window template
+│   │   └── dock-settings.js       # Dock settings system window logic
 │   └── module-loader/             # Module loading system
 │       └── module-loader.js
 │
@@ -79,6 +81,15 @@ modules/
     └── facebook/                  # Facebook integration
         └── facebook-module.js
 ```
+
+## Dock Bar and Settings (2024 Update)
+
+- The dock (taskbar) now supports a system window for settings, accessible via the ⚙️ button.
+- Dock settings are implemented as a system window/app using `DockSettingsProcessor` and `DockSettingsControl`.
+- Users can set dock position (bottom, top, left, right) and pin/unpin apps to the dock.
+- Pinned apps are always visible in the dock, even if not running, and persist after reload (localStorage).
+- The dock settings window uses the same conventions as other system apps (template, processor, control separation).
+- See `core/taskbar/dock-settings.html` and `core/taskbar/dock-settings.js` for implementation.
 
 ## Module Communication
 
@@ -351,9 +362,9 @@ destroy() {
 To migrate existing apps to the new structure:
 
 1. **Extract HTML** to separate template files
-2. **Split JavaScript** into control and processor layers
-3. **Update paths** in module configuration
-4. **Test functionality** after migration
-5. **Update documentation** for new structure
+2. **Create control and processor layers**
+3. **Register app with event bus**
+4. **Use system window conventions**
+5. **Test with all themes and window sizes**
 
 This modular architecture provides a solid foundation for building complex applications while maintaining code quality and developer productivity. 
