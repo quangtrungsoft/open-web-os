@@ -51,6 +51,8 @@ class ContextMenu {
     showContextMenu(e) {
         const themes = this.getAvailableThemes();
         const currentTheme = this.getCurrentTheme();
+        const isFullScreen = document.fullscreenElement !== null;
+        const fullScreenText = isFullScreen ? 'Exit Full screen' : 'Full screen';
         
         this.contextMenuElement.innerHTML = `
             <div class="context-item">View</div>
@@ -62,6 +64,7 @@ class ContextMenu {
                 <span class="submenu-arrow">▶</span>
             </div>
             <div class="context-item">Display settings</div>
+            <div class="context-item" id="toggleFullScreen">${fullScreenText}</div>
             <div class="context-item">About this project</div>
         `;
 
@@ -93,30 +96,11 @@ class ContextMenu {
     }
 
     setupSubmenuEvents() {
-        // Handle submenu hover
-        const themesSubmenuTrigger = this.contextMenuElement.querySelector('[data-submenu="themes"]');
-        const themesSubmenu = this.contextMenuElement.querySelector('#themes-submenu');
-        
-        if (themesSubmenuTrigger && themesSubmenu) {
-            themesSubmenuTrigger.addEventListener('mouseenter', () => {
-                themesSubmenu.style.display = 'block';
-            });
-            
-            themesSubmenuTrigger.addEventListener('mouseleave', () => {
-                setTimeout(() => {
-                    if (!themesSubmenu.matches(':hover')) {
-                        themesSubmenu.style.display = 'none';
-                    }
-                }, 100);
-            });
-            
-            themesSubmenu.addEventListener('mouseleave', () => {
-                themesSubmenu.style.display = 'none';
-            });
-        }
+        // Handle submenu hover for themes
+        this.setupSubmenuHover('themes');
 
         // Handle theme selection
-        const themeItems = this.contextMenuElement.querySelectorAll('.context-submenu-item');
+        const themeItems = this.contextMenuElement.querySelectorAll('[data-theme-id]');
         themeItems.forEach(item => {
             item.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -125,6 +109,39 @@ class ContextMenu {
                 this.hideContextMenu();
             });
         });
+
+        // Handle full screen toggle
+        const fullScreenBtn = this.contextMenuElement.querySelector('#toggleFullScreen');
+        if (fullScreenBtn) {
+            fullScreenBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleFullScreen();
+                this.hideContextMenu();
+            });
+        }
+    }
+
+    setupSubmenuHover(submenuId) {
+        const submenuTrigger = this.contextMenuElement.querySelector(`[data-submenu="${submenuId}"]`);
+        const submenu = this.contextMenuElement.querySelector(`#${submenuId}-submenu`);
+        
+        if (submenuTrigger && submenu) {
+            submenuTrigger.addEventListener('mouseenter', () => {
+                submenu.style.display = 'block';
+            });
+            
+            submenuTrigger.addEventListener('mouseleave', () => {
+                setTimeout(() => {
+                    if (!submenu.matches(':hover')) {
+                        submenu.style.display = 'none';
+                    }
+                }, 100);
+            });
+            
+            submenu.addEventListener('mouseleave', () => {
+                submenu.style.display = 'none';
+            });
+        }
     }
 
     getAvailableThemes() {
@@ -146,6 +163,12 @@ class ContextMenu {
             this.themeManager.applyTheme(themeId);
         } else if (this.eventBus) {
             this.eventBus.emit('changeTheme', { themeId });
+        }
+    }
+
+    toggleFullScreen() {
+        if (this.eventBus) {
+            this.eventBus.emit('desktop:toggleFullScreen');
         }
     }
 

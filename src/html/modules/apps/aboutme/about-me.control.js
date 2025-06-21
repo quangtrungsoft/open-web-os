@@ -14,16 +14,23 @@ class AboutMeControl {
      * Initialize the control layer
      * @param {string} windowId - The window ID
      * @param {HTMLElement} windowElement - The window DOM element
+     * @param {Object} data - Initial data for the UI
      */
-    init(windowId, windowElement) {
+    init(windowId, windowElement, data) {
         this.windowId = windowId;
         this.windowElement = windowElement;
         
-        if (this.isInitialized) return;
+        if (this.isInitialized) {
+            this.updateUI(data);
+            return;
+        };
         
         this.bindEvents();
         this.setupAnimations();
         this.setupBookingMenu();
+        if (data) {
+            this.updateUI(data);
+        }
         this.isInitialized = true;
         
         console.log('About Me Control initialized');
@@ -145,35 +152,52 @@ class AboutMeControl {
      * @param {Object} data - Data to update the UI with
      */
     updateUI(data) {
-        // Update creator name
-        if (data.name) {
-            const nameElement = this.windowElement.querySelector('.creator-info h2');
-            if (nameElement) {
-                nameElement.textContent = data.name;
-            }
+        if (!data) return;
+
+        // Update avatar
+        if (data.avatar) {
+            const avatarElement = this.windowElement.querySelector('.summary-avatar');
+            if (avatarElement) avatarElement.src = data.avatar;
         }
 
-        // Update creator title
-        if (data.title) {
-            const titleElement = this.windowElement.querySelector('.creator-title');
-            if (titleElement) {
-                titleElement.textContent = data.title;
-            }
+        // Update full name
+        if (data.fullName) {
+            const nameElement = this.windowElement.querySelector('.summary-header-main h1');
+            if (nameElement) nameElement.textContent = data.fullName;
         }
 
-        // Update email
+        // Update tagline
+        if (data.tagline) {
+            const taglineElement = this.windowElement.querySelector('.summary-tagline');
+            if (taglineElement) taglineElement.textContent = data.tagline;
+        }
+
+        // Update introduction
+        if (data.introduction) {
+            const introElement = this.windowElement.querySelector('.summary-best');
+            if (introElement) introElement.textContent = data.introduction;
+        }
+
+        // Update contact links
         if (data.email) {
-            const emailElement = this.windowElement.querySelector('.contact-item .contact-value');
-            if (emailElement) {
-                emailElement.textContent = data.email;
+            const emailLink = this.windowElement.querySelector('.summary-contact a[href^="mailto:"]');
+            if (emailLink) {
+                emailLink.href = `mailto:${data.email}`;
+                emailLink.textContent = data.email;
             }
         }
-
-        // Update website
-        if (data.website) {
-            const websiteElements = this.windowElement.querySelectorAll('.contact-item .contact-value');
-            if (websiteElements.length > 1) {
-                websiteElements[1].textContent = data.website;
+        if (data.linkedin) {
+            const linkedinLink = this.windowElement.querySelector('.summary-contact a[href*="linkedin.com"]');
+            if (linkedinLink) {
+                linkedinLink.href = data.linkedin;
+                linkedinLink.textContent = data.linkedin;
+            }
+        }
+        if (data.github) {
+            const githubLink = this.windowElement.querySelector('.summary-contact a[href*="github.com"]');
+            if (githubLink) {
+                githubLink.href = data.github;
+                githubLink.textContent = data.github;
             }
         }
 
@@ -182,29 +206,57 @@ class AboutMeControl {
             this.updateProjectList(data.projects);
         }
 
-        // Update copyright
-        if (data.copyright) {
-            const copyrightElement = this.windowElement.querySelector('.copyright p');
-            if (copyrightElement) {
-                copyrightElement.textContent = data.copyright;
-            }
+        // Update latest posts
+        if (data.latestPosts) {
+            this.updateLatestPosts(data.latestPosts);
         }
     }
 
     /**
      * Update the project list
-     * @param {Array} projects - Array of project names
+     * @param {Array} projects - Array of project objects
      */
     updateProjectList(projects) {
-        const projectList = this.windowElement.querySelector('.project-list');
+        const projectList = this.windowElement.querySelector('.summary-project-list');
         if (projectList) {
-            projectList.innerHTML = '';
+            projectList.innerHTML = ''; // Clear existing projects
             projects.forEach(project => {
-                const li = document.createElement('li');
-                li.textContent = project;
-                li.addEventListener('mouseenter', (e) => this.handleProjectHover(e, true));
-                li.addEventListener('mouseleave', (e) => this.handleProjectHover(e, false));
-                projectList.appendChild(li);
+                const projectCard = document.createElement('div');
+                projectCard.className = 'summary-project-card';
+
+                let linksHTML = '';
+                if (project.links && project.links.length > 0) {
+                    linksHTML = project.links.map(link => 
+                        `<a href="${link.url}" target="_blank">${link.label}</a>`
+                    ).join(' | ');
+                }
+
+                projectCard.innerHTML = `
+                    <h3>${project.title}</h3>
+                    <p class="multiline-ellipsis">${project.description}</p>
+                    ${linksHTML ? `<div class="summary-project-links">${linksHTML}</div>` : ''}
+                `;
+                projectList.appendChild(projectCard);
+            });
+        }
+    }
+
+    /**
+     * Update the latest posts list
+     * @param {Array} posts - Array of post objects
+     */
+    updateLatestPosts(posts) {
+        const postList = this.windowElement.querySelector('.summary-post-list');
+        if (postList) {
+            postList.innerHTML = ''; // Clear existing posts
+            posts.forEach(post => {
+                const postCard = document.createElement('div');
+                postCard.className = 'summary-post-card';
+                postCard.innerHTML = `
+                    <h4><a href="${post.link}" target="_blank">${post.title}</a></h4>
+                    <p class="multiline-ellipsis">${post.summary}</p>
+                `;
+                postList.appendChild(postCard);
             });
         }
     }
@@ -261,27 +313,42 @@ class AboutMeControl {
     setupBookingMenu() {
         const bookingMenu = this.windowElement.querySelector('.booking-menu');
         const bookingToggle = this.windowElement.querySelector('.booking-toggle');
+        const bookingActions = this.windowElement.querySelectorAll('.booking-action');
+
         if (bookingToggle && bookingMenu) {
-            bookingToggle.addEventListener('click', function(e) {
+            bookingToggle.addEventListener('click', (e) => {
                 e.stopPropagation();
                 bookingMenu.classList.toggle('open');
             });
+
             // Close menu when clicking outside
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', (e) => {
                 if (!bookingMenu.contains(e.target)) {
                     bookingMenu.classList.remove('open');
                 }
             });
         }
-        // Show label on focus for accessibility
-        this.windowElement.querySelectorAll('.booking-action').forEach(btn => {
-            btn.addEventListener('focus', function() {
-                btn.classList.add('focus');
-            });
-            btn.addEventListener('blur', function() {
-                btn.classList.remove('focus');
+
+        bookingActions.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const action = btn.dataset.action;
+                this.handleBookingAction(action);
+                bookingMenu.classList.remove('open');
             });
         });
+    }
+
+    /**
+     * Handle booking action clicks
+     * @param {string} action - The booking action to perform
+     */
+    handleBookingAction(action) {
+        if (this.processor && typeof this.processor.handleBookingAction === 'function') {
+            this.processor.handleBookingAction(action, this.windowElement);
+        } else {
+            console.error('Processor or handleBookingAction method not available');
+        }
     }
 }
 

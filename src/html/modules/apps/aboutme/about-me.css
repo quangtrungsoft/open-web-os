@@ -415,3 +415,101 @@
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 } 
+.summary-project-links {
+  margin-top: 10px;
+  font-size: 12px;
+}
+.summary-project-links a {
+  color: var(--os-accent-light);
+  text-decoration: none;
+}
+.summary-project-links a:hover {
+  text-decoration: underline;
+}
+
+.multiline-ellipsis {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Số dòng muốn hiển thị */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.summary-project-card p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--os-text-secondary);
+}
+
+.summary-project-links {
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.summary-project-links a, .summary-project-links p {
+  color: var(--os-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.summary-project-links a:hover {
+  color: var(--os-accent-light);
+  text-decoration: underline;
+}
+
+.summary-latest-posts {
+  margin-top: 30px;
+}
+
+.summary-latest-posts h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--os-text);
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--os-border-light);
+  padding-bottom: 10px;
+}
+
+.summary-post-list {
+  display: grid;
+  gap: 20px;
+}
+
+.summary-post-card {
+  background: var(--os-border-light);
+  padding: 15px;
+  border-radius: 6px;
+  border-left: 4px solid var(--os-accent);
+  transition: all 0.3s ease;
+}
+
+.summary-post-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px var(--os-shadow);
+}
+
+.summary-post-card h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.summary-post-card h4 a {
+  color: var(--os-text);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.summary-post-card h4 a:hover {
+  color: var(--os-accent);
+}
+
+.summary-post-card p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--os-text-secondary);
+  margin: 0;
+}
+
+.summary-contact {
+  margin-top: 30px;
+  text-align: center;
+}

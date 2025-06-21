@@ -104,58 +104,60 @@ class AboutMeProcessor {
                     projects: [
                         {
                             title: 'My Desktop',
-                            description: `My Desktop is a personal, interactive web-based desktop environment that showcases creativity and skills. It's a unique blend of portfolio, personal website, and interactive experience.`,
+                            description: `A personal, interactive web-based desktop environment that showcases creativity and skills. It's a unique blend of portfolio, personal website, and interactive experience.`,
                             links: [
-                                { label: 'Live Demo', url: 'https://yourusername.github.io/my-desktop' },
-                                { label: 'GitHub', url: 'https://github.com/yourusername/my-desktop' }
+                                { label: 'Live Demo', url: 'https://vuquangtrung.io.vn' },
+                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/my-desktop' }
                             ]
                         },
                         {
-                            title: 'BreadMaster',
-                            description: 'Artisan bread recipe tracker and community platform built with modern web technologies.',
-                            links: [
-                                { label: 'Live Demo', url: 'https://breadmaster.app' },
-                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/breadmaster' }
-                            ]
+                            title: 'Open Jourual Submit',
+                            description: 'An online journal management system that streamlines submission, peer review, and publishing. With a user-friendly and customizable interface, it helps academic organizations save time and improve editorial efficiency.',
+                            links: []
                         },
                         {
-                            title: 'ERPify',
-                            description: 'Modular ERP system designed for small businesses with customizable modules.',
-                            links: [
-                                { label: 'Documentation', url: 'https://erpify.dev' },
-                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/erpify' }
-                            ]
+                            title: 'Open ERP',
+                            description: 'Designed for small businesses with customizable modules.',
+                            links: []
                         },
                         {
-                            title: 'RecipeShare',
-                            description: 'Social platform for sharing and discovering recipes with community features.',
-                            links: [
-                                { label: 'Live Demo', url: 'https://recipeshare.social' },
-                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/recipeshare' }
-                            ]
+                            title: 'Payment gateway',
+                            description: 'An open-source payment platform that connects banks and e-wallets. It features modular architecture for easy integration, enabling fast, secure, and scalable online transactions for diverse business needs.',
+                            links: []
+                        },
+                    ],
+                    latestPosts: [
+                        {
+                            title: 'The Art of Clean Code: Beyond the Basics',
+                            summary: 'Exploring advanced principles of writing maintainable and readable code that stands the test of time.',
+                            link: '#'
                         },
                         {
-                            title: 'TaskFlow',
-                            description: 'Productivity app for managing daily tasks and building better habits.',
-                            links: [
-                                { label: 'Live Demo', url: 'https://taskflow.app' },
-                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/taskflow' }
-                            ]
+                            title: 'Database Optimization: A Deep Dive into Indexing',
+                            summary: 'How to properly use database indexes to dramatically improve query performance.',
+                            link: '#'
                         },
                         {
-                            title: 'BakeCam',
-                            description: 'Smart camera app for monitoring bread proofing and baking with AI assistance.',
-                            links: [
-                                { label: 'App Store', url: 'https://apps.apple.com/bakecam' },
-                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/bakecam' }
-                            ]
+                            title: 'Microservices vs. Monoliths: A Pragmatic Approach',
+                            summary: 'Breaking down the pros and cons of each architectural style and when to use them.',
+                            link: '#'
+                        },
+                        {
+                            title: 'The Power of Asynchronous Programming in .NET',
+                            summary: 'A practical guide to using async/await to build responsive and scalable applications.',
+                            link: '#'
+                        },
+                        {
+                            title: 'Securing Your Web Applications: Best Practices',
+                            summary: 'An overview of common security vulnerabilities and how to protect your apps from them.',
+                            link: '#'
                         }
                     ]
                 },
                 onWindowCreated: (windowElement) => {
                     if (!windowElement) return;
                     if (!window.aboutMeControl) window.aboutMeControl = new AboutMeControl(this);
-                    window.aboutMeControl.init(windowId, windowElement);
+                    window.aboutMeControl.init(windowId, windowElement, windowConfig.data);
                 }
             };
             
@@ -166,6 +168,58 @@ class AboutMeProcessor {
             
         } catch (error) {
             console.error('Failed to launch About Me:', error);
+        }
+    }
+
+    /**
+     * Handle booking actions from the control layer
+     * @param {string} action - The booking action to perform
+     * @param {HTMLElement} windowElement - The window element
+     */
+    handleBookingAction(action, windowElement) {
+        let notification = {
+            title: 'Booking Request',
+            message: '',
+            icon: '📅'
+        };
+
+        switch (action) {
+            case 'cv':
+                notification.message = 'Your CV download will begin shortly.';
+                notification.icon = '⬇️';
+                // In a real app, you would trigger a file download here
+                // window.location.href = '/path/to/cv.pdf';
+                break;
+            case 'feedback':
+                notification.message = 'Thank you for your feedback! We will get back to you soon.';
+                notification.icon = '✉️';
+                // In a real app, you might open a feedback form or mail client
+                // window.open('mailto:trungvu.evolution@gmail.com?subject=Feedback');
+                break;
+            case 'callback':
+                notification.message = 'We have received your callback request. We will call you back within 24 hours.';
+                notification.icon = '📞';
+                break;
+            case 'dev':
+                notification.message = 'Your development request has been submitted. We will contact you to discuss the details.';
+                notification.icon = '💻';
+                break;
+            case 'consult':
+                notification.message = 'Your consultation request has been scheduled. Please check your email for confirmation.';
+                notification.icon = '🗓️';
+                break;
+            default:
+                notification.title = 'Unknown Action';
+                notification.message = `The action "${action}" is not recognized.`;
+                notification.icon = '❓';
+                break;
+        }
+
+        if (this.eventBus) {
+            this.eventBus.emit('showNotification', notification);
+        } else {
+            console.error('EventBus not available for notifications');
+            alert(notification.message);
         }
     }
 
