@@ -597,49 +597,95 @@ class TestModeControl {
             return;
         }
         
+        this.log('All elements found successfully', 'success');
+        
+        // Test 1: Show loading screen
         this.log('Test 1: Showing loading screen...', 'info');
         
         // Show loading screen
-        loadingScreen.style.display = 'block';
+        loadingScreen.style.display = 'flex';
         loadingScreen.style.opacity = '1';
         loadingScreen.style.visibility = 'visible';
         loadingScreen.style.pointerEvents = 'auto';
         loadingScreen.style.zIndex = '9999';
-        loadingScreen.classList.remove('hidden');
+        loadingScreen.classList.remove('hidden', 'fade-out');
         
         this.log('Loading screen is now visible', 'success');
         
-        // Test 2: Simulate loading progress
-        this.log('Test 2: Simulating loading progress...', 'info');
+        // Test 2: Reset progress bar
+        this.log('Test 2: Resetting progress bar...', 'info');
+        progressFill.style.width = '0%';
+        progressFill.style.background = '#40a9ff';
+        progressText.textContent = 'Initializing...';
         
-        let progress = 0;
-        const maxProgress = 100;
-        const progressStep = 2;
-        const progressInterval = 100; // 100ms between updates
+        // Debug: Check initial state
+        this.log(`Initial progress fill width: ${progressFill.style.width}`, 'info');
+        this.log(`Initial progress fill background: ${progressFill.style.background}`, 'info');
+        
+        // Test 3: Simple progress test first
+        this.log('Test 3: Testing basic progress functionality...', 'info');
+        
+        // Quick test to ensure progress bar works
+        setTimeout(() => {
+            progressFill.style.width = '10%';
+            this.log('Set progress to 10% - testing basic functionality', 'info');
+            
+            setTimeout(() => {
+                // Test 4: Full loading simulation
+                this.log('Test 4: Starting full loading simulation...', 'info');
+                this.startFullLoadingSimulation(progressFill, progressText);
+            }, 500);
+        }, 500);
+    }
+    
+    /**
+     * Start the full loading simulation
+     */
+    startFullLoadingSimulation(progressFill, progressText) {
+        let progress = 10;
+        const maxProgress = 101;
+        const progressSteps = [
+            { start: 10, end: 25, step: 1.0, interval: 50, message: 'Starting system' },
+            { start: 25, end: 45, step: 1.2, interval: 45, message: 'Loading modules' },
+            { start: 45, end: 65, step: 1.5, interval: 40, message: 'Preparing desktop' },
+            { start: 65, end: 85, step: 1.8, interval: 35, message: 'Starting apps' },
+            { start: 85, end: 95, step: 1.0, interval: 50, message: 'Finalizing' },
+            { start: 95, end: 100, step: 0.5, interval: 80, message: 'Ready' }
+        ];
         
         const updateProgress = () => {
             if (progress <= maxProgress) {
-                // Update progress bar
-                progressFill.style.width = `${progress}%`;
+                // Find current step
+                const currentStep = progressSteps.find(step => progress >= step.start && progress <= step.end);
                 
-                // Update progress text
-                progressText.textContent = `Loading... ${progress}%`;
-                
-                this.log(`Progress: ${progress}%`, 'info');
-                
-                progress += progressStep;
-                
-                // Continue progress
-                setTimeout(updateProgress, progressInterval);
-            } else {
-                // Loading complete
-                this.log('Loading simulation complete!', 'success');
-                progressText.textContent = 'Loading Complete!';
-                
-                // Hide loading screen after a delay
-                setTimeout(() => {
-                    this.hideLoadingScreen();
-                }, 2000);
+                if (currentStep) {
+                    // Update progress bar with smooth transition
+                    const newWidth = `${progress}%`;
+                    progressFill.style.width = newWidth;
+                    
+                    // Update progress text with step-specific message
+                    progressText.textContent = `${currentStep.message}... ${Math.round(progress)}%`;
+                    
+                    this.log(`Progress: ${Math.round(progress)}% - ${currentStep.message}`, 'info');
+                    
+                    progress += currentStep.step;
+                    
+                    // Continue progress with step-specific interval
+                    setTimeout(updateProgress, currentStep.interval);
+                } else {
+                    // Final step - completion
+                    progressFill.style.width = '100%';
+                    progressText.textContent = 'Welcome to My Desktop!';
+                    this.log('Progress: 100% - Loading Complete!', 'success');
+                    
+                    // Simple completion effect
+                    progressFill.style.background = '#00ff88';
+                    
+                    // Hide loading screen immediately when reaching 100%
+                    setTimeout(() => {
+                        this.hideLoadingScreen();
+                    }, 500);
+                }
             }
         };
         
