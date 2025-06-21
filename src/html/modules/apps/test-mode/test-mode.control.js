@@ -38,8 +38,8 @@ class TestModeControl {
         // System testing buttons
         this.bindButton('testDuplicateBtn', () => this.testDuplicatePrevention());
         this.bindButton('testAnimationsBtn', () => this.testAnimations());
+        this.bindButton('testLoadingBtn', () => this.testLoading());
         this.bindButton('testLoadingDelayBtn', () => this.testLoadingDelay());
-        this.bindButton('testLoadingScreenBtn', () => this.testLoadingScreen());
         
         // UI testing buttons
         this.bindButton('testDesktopInteractivityBtn', () => this.testDesktopInteractivity());
@@ -388,54 +388,6 @@ class TestModeControl {
     }
 
     /**
-     * Test loading screen positioning and functionality
-     */
-    testLoadingScreen() {
-        this.log('Testing Loading Screen...');
-        
-        // Test 1: Check loading screen element
-        const loadingScreen = document.getElementById('loadingScreen');
-        if (loadingScreen) {
-            this.log('Test 1: Loading screen element found', 'success');
-            const rect = loadingScreen.getBoundingClientRect();
-            this.log(`  Position: top=${rect.top}, left=${rect.left}`, 'info');
-            this.log(`  Size: width=${rect.width}, height=${rect.height}`, 'info');
-            this.log(`  CSS position: ${getComputedStyle(loadingScreen).position}`, 'info');
-            this.log(`  CSS display: ${getComputedStyle(loadingScreen).display}`, 'info');
-        } else {
-            this.log('Test 1: Loading screen element not found', 'error');
-        }
-        
-        // Test 2: Check progress bar functionality
-        const progressFill = document.getElementById('progressFill');
-        if (progressFill) {
-            this.log('Test 2: Testing progress bar functionality...', 'info');
-            
-            // Test different progress values
-            const testProgresses = [0, 25, 50, 75, 100];
-            let currentIndex = 0;
-            
-            const testProgress = () => {
-                if (currentIndex < testProgresses.length) {
-                    const progress = testProgresses[currentIndex];
-                    progressFill.style.width = `${progress}%`;
-                    this.log(`  Set progress to ${progress}%`, 'info');
-                    currentIndex++;
-                    setTimeout(testProgress, 500);
-                } else {
-                    // Reset to 0
-                    progressFill.style.width = '0%';
-                    this.log('  Reset progress to 0%', 'info');
-                }
-            };
-            
-            testProgress();
-        }
-        
-        this.log('Loading Screen Test Complete', 'success');
-    }
-
-    /**
      * Test desktop interactivity and identify blocking elements
      */
     testDesktopInteractivity() {
@@ -617,6 +569,108 @@ class TestModeControl {
         });
         
         this.log('Drag and Drop Functionality Test Complete', 'success');
+    }
+
+    /**
+     * Test loading screen with progress bar
+     */
+    testLoading() {
+        this.log('Testing Loading Screen with Progress Bar...');
+        
+        // Get loading screen elements
+        const loadingScreen = document.getElementById('loadingScreen');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        
+        if (!loadingScreen) {
+            this.log('Loading screen element not found', 'error');
+            return;
+        }
+        
+        if (!progressFill) {
+            this.log('Progress fill element not found', 'error');
+            return;
+        }
+        
+        if (!progressText) {
+            this.log('Progress text element not found', 'error');
+            return;
+        }
+        
+        this.log('Test 1: Showing loading screen...', 'info');
+        
+        // Show loading screen
+        loadingScreen.style.display = 'block';
+        loadingScreen.style.opacity = '1';
+        loadingScreen.style.visibility = 'visible';
+        loadingScreen.style.pointerEvents = 'auto';
+        loadingScreen.style.zIndex = '9999';
+        loadingScreen.classList.remove('hidden');
+        
+        this.log('Loading screen is now visible', 'success');
+        
+        // Test 2: Simulate loading progress
+        this.log('Test 2: Simulating loading progress...', 'info');
+        
+        let progress = 0;
+        const maxProgress = 100;
+        const progressStep = 2;
+        const progressInterval = 100; // 100ms between updates
+        
+        const updateProgress = () => {
+            if (progress <= maxProgress) {
+                // Update progress bar
+                progressFill.style.width = `${progress}%`;
+                
+                // Update progress text
+                progressText.textContent = `Loading... ${progress}%`;
+                
+                this.log(`Progress: ${progress}%`, 'info');
+                
+                progress += progressStep;
+                
+                // Continue progress
+                setTimeout(updateProgress, progressInterval);
+            } else {
+                // Loading complete
+                this.log('Loading simulation complete!', 'success');
+                progressText.textContent = 'Loading Complete!';
+                
+                // Hide loading screen after a delay
+                setTimeout(() => {
+                    this.hideLoadingScreen();
+                }, 2000);
+            }
+        };
+        
+        // Start progress simulation
+        updateProgress();
+    }
+    
+    /**
+     * Hide loading screen
+     */
+    hideLoadingScreen() {
+        this.log('Hiding loading screen...', 'info');
+        
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            // Add hidden class for robust hiding
+            loadingScreen.classList.add('hidden');
+            
+            // Also set styles directly for immediate effect
+            loadingScreen.style.opacity = '0';
+            loadingScreen.style.pointerEvents = 'none';
+            loadingScreen.style.visibility = 'hidden';
+            loadingScreen.style.zIndex = '-1';
+            
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                this.log('Loading screen hidden completely', 'success');
+            }, 100);
+        } else {
+            this.log('Loading screen element not found', 'error');
+        }
     }
 
     /**

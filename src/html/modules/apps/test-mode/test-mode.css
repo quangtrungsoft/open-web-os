@@ -70,8 +70,8 @@
 .aboutme-btn { background: #6c5ce7; color: var(--os-text-light); }
 .duplicate-btn { background: #ff6b6b; color: var(--os-text-light); }
 .animations-btn { background: #4ecdc4; color: var(--os-text-light); }
+.loading-test-btn { background: #2d3436; color: var(--os-text-light); }
 .loading-btn { background: #fdcb6e; color: var(--os-text-light); }
-.loading-screen-btn { background: #a29bfe; color: var(--os-text-light); }
 .desktop-btn { background: #fd79a8; color: var(--os-text-light); }
 .taskbar-btn { background: #00b894; color: var(--os-text-light); }
 .startmenu-btn { background: #e84393; color: var(--os-text-light); }
