@@ -1,6 +1,6 @@
 /**
- * WebOS - Context Menu
- * Handles context menu functionality
+ * My Desktop - Context Menu
+ * Handles context menu functionality and theme switching
  */
 
 class ContextMenu {

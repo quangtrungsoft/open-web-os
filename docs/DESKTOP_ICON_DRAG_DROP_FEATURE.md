@@ -65,7 +65,7 @@ The desktop icon drag and drop feature allows users to move desktop icons anywhe
 #### Testing the Feature
 ```javascript
 // Test drag and drop functionality
-window.webOSApp.testDragDropFunctionality();
+window.myDesktopApp.testDragDropFunctionality();
 
 // Access desktop icons module directly
 const desktopIcons = window.desktopIcons;

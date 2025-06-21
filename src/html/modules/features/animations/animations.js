@@ -1,6 +1,6 @@
 /**
- * WebOS - Animations
- * Handles animation functionality
+ * My Desktop - Animations
+ * Handles UI animations and transitions
  */
 
 class Animations {

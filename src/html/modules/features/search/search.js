@@ -1,6 +1,6 @@
 /**
- * WebOS - Search
- * Handles search functionality
+ * My Desktop - Search
+ * Handles search functionality across applications
  */
 
 class Search {

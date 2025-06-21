@@ -1,6 +1,6 @@
 /**
- * WebOS - Drag and Drop
- * Handles drag and drop functionality
+ * My Desktop - Drag and Drop
+ * Handles drag and drop functionality across the interface
  */
 
 class DragAndDrop {

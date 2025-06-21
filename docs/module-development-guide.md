@@ -398,7 +398,7 @@ Update `index.html` to include your module:
 
 ```html
 <script>
-    window.WEBOS_MODULES = {
+    window.MYDESKTOP_MODULES = {
         // ... existing modules
         
         apps: {

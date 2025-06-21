@@ -1,5 +1,5 @@
 /**
- * WebOS - Template Loader
+ * My Desktop - Template Loader
  * Handles loading HTML templates from separate files
  */
 

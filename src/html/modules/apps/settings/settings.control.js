@@ -1,6 +1,6 @@
 /**
- * WebOS - Settings Control
- * Handles the Settings app UI interactions and theme selection
+ * My Desktop - Settings Control
+ * Handles settings UI interactions and user preferences
  */
 
 class SettingsControl {

@@ -1,6 +1,6 @@
 /**
- * WebOS - Start Menu
- * Handles start menu functionality
+ * My Desktop - Start Menu
+ * Handles start menu functionality and app launching
  */
 
 class StartMenu {

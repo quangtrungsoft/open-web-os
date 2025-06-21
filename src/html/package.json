@@ -1,39 +1,32 @@
 {
-  "name": "webos",
+  "name": "my-desktop",
   "version": "1.0.0",
-  "description": "A fully interactive web operating system desktop environment built with HTML, CSS, and JavaScript",
+  "description": "A personal, interactive web-based desktop environment",
   "main": "index.html",
   "scripts": {
-    "start": "python -m http.server 8000",
-    "dev": "live-server --port=8000",
-    "build:css": "sass styles/main.scss styles/main.css",
-    "watch:css": "sass --watch styles/main.scss styles/main.css",
-    "build": "npm run build:css",
-    "serve": "npm run dev"
+    "start": "npx serve .",
+    "dev": "npx serve . -p 3000",
+    "build": "echo 'No build step required'",
+    "test": "echo 'No tests specified'"
   },
   "keywords": [
-    "webos",
-    "operating-system",
     "desktop",
-    "ui",
     "web",
-    "javascript",
-    "css",
-    "html",
-    "virtual-desktop"
+    "interface",
+    "personal",
+    "portfolio"
   ],
-  "author": "Your Name",
+  "author": "Vu Quang Trung",
   "license": "MIT",
-  "devDependencies": {
-    "live-server": "^1.2.2",
-    "sass": "^1.69.0"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/webos.git"
+    "url": "https://github.com/yourusername/my-desktop.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/webos/issues"
+    "url": "https://github.com/yourusername/my-desktop/issues"
   },
-  "homepage": "https://github.com/yourusername/webos#readme"
+  "homepage": "https://github.com/yourusername/my-desktop#readme",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
 } 

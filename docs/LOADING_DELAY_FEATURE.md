@@ -68,7 +68,7 @@ getLoadingDelay() {
 ```javascript
 loadDelayFromStorage() {
     try {
-        const savedDelay = localStorage.getItem('webos_loading_delay');
+        const savedDelay = localStorage.getItem('mydesktop_loading_delay');
         if (savedDelay !== null) {
             const delay = parseInt(savedDelay);
             if (!isNaN(delay) && delay >= 0 && delay <= 5000) {
@@ -87,7 +87,7 @@ loadDelayFromStorage() {
 ```javascript
 saveDelayToStorage(delay) {
     try {
-        localStorage.setItem('webos_loading_delay', delay.toString());
+        localStorage.setItem('mydesktop_loading_delay', delay.toString());
         console.log(`Saved loading delay to storage: ${delay}ms`);
     } catch (error) {
         console.warn('Failed to save delay to localStorage:', error);
@@ -368,20 +368,20 @@ The `testLoadingDelay()` function performs comprehensive tests:
 ### **Set Delay Programmatically**
 ```javascript
 // Set to 3 seconds
-window.webOSApp.setLoadingDelay(3000);
+window.myDesktopApp.setLoadingDelay(3000);
 
 // Set to 0 seconds (minimum loading time still applies)
-window.webOSApp.setLoadingDelay(0);
+window.myDesktopApp.setLoadingDelay(0);
 
 // Get current delay
-const currentDelay = window.webOSApp.getLoadingDelay();
+const currentDelay = window.myDesktopApp.getLoadingDelay();
 console.log(`Current delay: ${currentDelay}ms`);
 ```
 
 ### **Test Loading Delay System**
 ```javascript
 // Run comprehensive test
-window.webOSApp.testLoadingDelay();
+window.myDesktopApp.testLoadingDelay();
 ```
 
 ## Conclusion

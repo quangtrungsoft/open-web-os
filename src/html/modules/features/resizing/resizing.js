@@ -1,6 +1,6 @@
 /**
- * WebOS - Resizing
- * Handles window resizing functionality
+ * My Desktop - Resizing
+ * Handles window resizing and responsive behavior
  */
 
 class Resizing {

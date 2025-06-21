@@ -1,6 +1,6 @@
 /**
- * WebOS - Module Loader
- * Handles loading and initialization of modules
+ * My Desktop - Module Loader
+ * Handles dynamic loading and initialization of modules
  */
 
 class ModuleLoader {
@@ -27,7 +27,7 @@ class ModuleLoader {
     async loadCoreModules() {
         this.updateStatus('Loading core modules...');
         
-        const config = window.WEBOS_MODULES.core;
+        const config = window.MYDESKTOP_MODULES.core;
         
         if (config.eventBus) {
             await this.loadModule('EventBus', () => {
@@ -78,7 +78,7 @@ class ModuleLoader {
     async loadUIModules() {
         this.updateStatus('Loading UI modules...');
         
-        const config = window.WEBOS_MODULES.ui;
+        const config = window.MYDESKTOP_MODULES.ui;
         
         if (config.startMenu) {
             await this.loadModule('StartMenu', () => {
@@ -120,7 +120,7 @@ class ModuleLoader {
     async loadAppModules() {
         this.updateStatus('Loading app modules...');
         
-        const config = window.WEBOS_MODULES.apps;
+        const config = window.MYDESKTOP_MODULES.apps;
         
         if (config.aboutMe) {
             await this.loadModule('AboutMeProcessor', () => {
@@ -169,6 +169,20 @@ class ModuleLoader {
                 return window.settingsProcessor;
             });
         }
+
+        if (config.testMode) {
+            await this.loadModule('TestModeProcessor', () => {
+                const dependencies = {
+                    eventBus: window.eventBus,
+                    templateLoader: window.templateLoader,
+                    windowManager: window.windowManager,
+                    themeManager: window.themeManager
+                };
+                window.testModeProcessor = new TestModeProcessor();
+                window.testModeProcessor.init(dependencies);
+                return window.testModeProcessor;
+            });
+        }
     }
 
     /**
@@ -177,7 +191,7 @@ class ModuleLoader {
     async loadFeatureModules() {
         this.updateStatus('Loading feature modules...');
         
-        const config = window.WEBOS_MODULES.features;
+        const config = window.MYDESKTOP_MODULES.features;
         
         if (config.dragAndDrop) {
             await this.loadModule('DragAndDrop', () => {
@@ -221,7 +235,7 @@ class ModuleLoader {
     async loadThirdPartyModules() {
         this.updateStatus('Loading third-party modules...');
         
-        const config = window.WEBOS_MODULES.thirdparty;
+        const config = window.MYDESKTOP_MODULES.thirdparty;
         
         if (config.threejs) {
             await this.loadModule('ThreeJS', () => {
@@ -320,7 +334,7 @@ class ModuleLoader {
      */
     countModules() {
         let count = 0;
-        const config = window.WEBOS_MODULES;
+        const config = window.MYDESKTOP_MODULES;
         
         // Count core modules
         Object.values(config.core).forEach(enabled => {

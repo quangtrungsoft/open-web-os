@@ -1,6 +1,6 @@
 /**
- * WebOS - Taskbar Module
- * Handles taskbar functionality and window management
+ * My Desktop - Taskbar Module
+ * Handles taskbar functionality and dock management
  */
 
 class Taskbar {

@@ -1,6 +1,6 @@
 /**
- * WebOS - About Me Processor
- * Handles the About Me application functionality
+ * My Desktop - About Me Processor
+ * Handles the About Me application logic and data management
  */
 
 class AboutMeProcessor {
@@ -103,12 +103,11 @@ class AboutMeProcessor {
                     github: 'https://github.com/quangtrungsoft',
                     projects: [
                         {
-                            title: 'WebOS open source',
-                            description: `WebOS is a modern, open-source operating system designed for the web. 
-                            It is built on top of the WebOS API and provides a rich set of features for building web applications.`,
+                            title: 'My Desktop',
+                            description: `My Desktop is a personal, interactive web-based desktop environment that showcases creativity and skills. It's a unique blend of portfolio, personal website, and interactive experience.`,
                             links: [
-                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/WebOS' },
-                                { label: 'Live Demo', url: '#' }
+                                { label: 'Live Demo', url: 'https://yourusername.github.io/my-desktop' },
+                                { label: 'GitHub', url: 'https://github.com/yourusername/my-desktop' }
                             ]
                         },
                         {

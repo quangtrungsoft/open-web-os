@@ -1,6 +1,6 @@
 /**
- * WebOS - Notifications
- * Handles notification system
+ * My Desktop - Notifications
+ * Handles notification system and user feedback
  */
 
 class Notifications {

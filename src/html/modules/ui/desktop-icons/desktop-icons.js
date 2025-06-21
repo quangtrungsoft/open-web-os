@@ -1,5 +1,5 @@
 /**
- * WebOS - Desktop Icons
+ * My Desktop - Desktop Icons
  * Handles desktop icon management with drag and drop functionality
  */
 

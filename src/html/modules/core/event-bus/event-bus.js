@@ -1,6 +1,6 @@
 /**
- * WebOS - Event Bus
- * Central event management system for inter-module communication
+ * My Desktop - Event Bus
+ * Handles communication between modules
  */
 
 class EventBus {

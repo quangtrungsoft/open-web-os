@@ -1,5 +1,5 @@
 /**
- * WebOS - Window Manager
+ * My Desktop - Window Manager
  * Handles window creation, management, and lifecycle
  */
 

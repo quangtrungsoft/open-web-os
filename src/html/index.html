@@ -62,104 +62,6 @@
         
         <!-- Desktop icons will be added here -->
         
-        <!-- Temporary test button -->
-        <div style="position: absolute; top: 50px; right: 50px; z-index: 1000;">
-            <button id="testSettingsBtn" style="
-                background: var(--os-accent);
-                color: var(--os-text-light);
-                border: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 14px;
-                margin-right: 10px;
-            ">Test Settings</button>
-            <button id="testAboutMeBtn" style="
-                background: var(--os-accent);
-                color: var(--os-text-light);
-                border: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 14px;
-                margin-right: 10px;
-            ">Test About Me</button>
-            <button id="testDuplicateBtn" style="
-                background: #ff6b6b;
-                color: var(--os-text-light);
-                border: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 14px;
-                margin-right: 10px;
-            ">Test Duplicate Prevention</button>
-            <button id="testAnimationsBtn" style="
-                background: #4ecdc4;
-                color: var(--os-text-light);
-                border: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 14px;
-                margin-right: 10px;
-            ">Test Animations</button>
-            <button id="testLoadingDelayBtn" style="
-                background: #fdcb6e;
-                color: var(--os-text-light);
-                border: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 14px;
-            ">Test Loading Delay</button>
-            <button id="testLoadingScreenBtn" style="
-                background: #a29bfe;
-                color: var(--os-text-light);
-                border: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 14px;
-            ">Test Loading Screen</button>
-            <button id="testDesktopInteractivityBtn" style="
-                background: #fd79a8;
-                color: var(--os-text-light);
-                border: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 14px;
-            ">Test Desktop Interactivity</button>
-            <button id="testTaskbarBtn" style="
-                background: #00b894;
-                color: var(--os-text-light);
-                border: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 14px;
-            ">Test Taskbar</button>
-            <button id="testStartMenuBtn" style="
-                background: #e84393;
-                color: var(--os-text-light);
-                border: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 14px;
-            ">Test Start Menu</button>
-            <button id="testDragDropBtn" style="
-                background: #0984e3;
-                color: var(--os-text-light);
-                border: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 14px;
-            ">Test Drag & Drop</button>
-        </div>
-
         <!-- Loading Delay Controls -->
         <div style="position: absolute; top: 120px; right: 50px; z-index: 1000; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; color: white;">
             <div style="margin-bottom: 10px; font-weight: bold;">Loading Delay Controls:</div>
@@ -232,7 +134,7 @@
 
     <!-- Module Configuration -->
     <script>
-        window.WEBOS_MODULES = {
+        window.MYDESKTOP_MODULES = {
             // Core modules (required)
             core: {
                 desktop: true,
@@ -257,7 +159,8 @@
                 calculator: true,
                 notepad: true,
                 explorer: true,
-                settings: true
+                settings: true,
+                testMode: true,
             },
             
             // Feature modules
@@ -307,6 +210,8 @@
     <script src="modules/apps/calculator/calculator.processor.js"></script>
     <script src="modules/apps/settings/settings.control.js"></script>
     <script src="modules/apps/settings/settings.processor.js"></script>
+    <script src="modules/apps/test-mode/test-mode.control.js"></script>
+    <script src="modules/apps/test-mode/test-mode.processor.js"></script>
     
     <!-- Feature Modules -->
     <script src="modules/features/drag-and-drop/drag-and-drop.js"></script>

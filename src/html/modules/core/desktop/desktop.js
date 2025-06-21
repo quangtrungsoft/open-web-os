@@ -1,6 +1,6 @@
 /**
- * WebOS - Desktop Module
- * Handles desktop functionality
+ * My Desktop - Desktop Module
+ * Handles desktop functionality and background management
  */
 
 class Desktop {

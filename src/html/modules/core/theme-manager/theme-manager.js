@@ -1,5 +1,5 @@
 /**
- * WebOS - Theme Manager
+ * My Desktop - Theme Manager
  * Handles theme switching and management with dynamic loading support
  */
 
@@ -40,10 +40,10 @@ class ThemeManager {
      * Initialize default themes
      */
     initializeDefaultThemes() {
-        // Classic WebOS Theme
+        // Classic My Desktop Theme
         this.addTheme('classic', {
             name: 'Classic',
-            description: 'Classic WebOS blue theme',
+            description: 'Classic My Desktop blue theme',
             class: 'ClassicTheme',
             cssPath: 'modules/ui/themes/classic/classic.css',
             jsPath: 'modules/ui/themes/classic/classic.js'
