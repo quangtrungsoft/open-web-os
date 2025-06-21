@@ -1,99 +1,90 @@
 <link rel="stylesheet" href="modules/apps/test-mode/test-mode.css" />
 
-<!-- Temporary test button -->
-<div class="test-mode" style="position: absolute; top: 50px; right: 50px; z-index: 1000;">
-    <button id="testSettingsBtn" style="
-        background: var(--os-accent);
-        color: var(--os-text-light);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        margin-right: 10px;
-    ">Test Settings</button>
-    <button id="testAboutMeBtn" style="
-        background: var(--os-accent);
-        color: var(--os-text-light);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        margin-right: 10px;
-    ">Test About Me</button>
-    <button id="testDuplicateBtn" style="
-        background: #ff6b6b;
-        color: var(--os-text-light);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        margin-right: 10px;
-    ">Test Duplicate Prevention</button>
-    <button id="testAnimationsBtn" style="
-        background: #4ecdc4;
-        color: var(--os-text-light);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        margin-right: 10px;
-    ">Test Animations</button>
-    <button id="testLoadingDelayBtn" style="
-        background: #fdcb6e;
-        color: var(--os-text-light);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-    ">Test Loading Delay</button>
-    <button id="testLoadingScreenBtn" style="
-        background: #a29bfe;
-        color: var(--os-text-light);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-    ">Test Loading Screen</button>
-    <button id="testDesktopInteractivityBtn" style="
-        background: #fd79a8;
-        color: var(--os-text-light);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-    ">Test Desktop Interactivity</button>
-    <button id="testTaskbarBtn" style="
-        background: #00b894;
-        color: var(--os-text-light);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-    ">Test Taskbar</button>
-    <button id="testStartMenuBtn" style="
-        background: #e84393;
-        color: var(--os-text-light);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-    ">Test Start Menu</button>
-    <button id="testDragDropBtn" style="
-        background: #0984e3;
-        color: var(--os-text-light);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-    ">Test Drag & Drop</button>
+<div class="test-mode-container">
+    <div class="test-section">
+        <h3>App Testing</h3>
+        <div class="test-buttons">
+            <button id="testSettingsBtn" class="test-btn settings-btn">
+                <span class="btn-icon">⚙️</span>
+                <span class="btn-text">Test Settings</span>
+            </button>
+            <button id="testAboutMeBtn" class="test-btn aboutme-btn">
+                <span class="btn-icon">👤</span>
+                <span class="btn-text">Test About Me</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>System Testing</h3>
+        <div class="test-buttons">
+            <button id="testDuplicateBtn" class="test-btn duplicate-btn">
+                <span class="btn-icon">🔄</span>
+                <span class="btn-text">Test Duplicate Prevention</span>
+            </button>
+            <button id="testAnimationsBtn" class="test-btn animations-btn">
+                <span class="btn-icon">✨</span>
+                <span class="btn-text">Test Animations</span>
+            </button>
+            <button id="testLoadingDelayBtn" class="test-btn loading-btn">
+                <span class="btn-icon">⏱️</span>
+                <span class="btn-text">Test Loading Delay</span>
+            </button>
+            <button id="testLoadingScreenBtn" class="test-btn loading-screen-btn">
+                <span class="btn-icon">🖥️</span>
+                <span class="btn-text">Test Loading Screen</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>UI Testing</h3>
+        <div class="test-buttons">
+            <button id="testDesktopInteractivityBtn" class="test-btn desktop-btn">
+                <span class="btn-icon">🖱️</span>
+                <span class="btn-text">Test Desktop Interactivity</span>
+            </button>
+            <button id="testTaskbarBtn" class="test-btn taskbar-btn">
+                <span class="btn-icon">📋</span>
+                <span class="btn-text">Test Taskbar</span>
+            </button>
+            <button id="testStartMenuBtn" class="test-btn startmenu-btn">
+                <span class="btn-icon">🏠</span>
+                <span class="btn-text">Test Start Menu</span>
+            </button>
+            <button id="testDragDropBtn" class="test-btn dragdrop-btn">
+                <span class="btn-icon">📦</span>
+                <span class="btn-text">Test Drag & Drop</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>Loading Delay Controls</h3>
+        <div class="delay-controls">
+            <div class="delay-info">
+                <span>Current Delay: <span id="currentDelay">0s</span></span>
+            </div>
+            <div class="delay-buttons">
+                <button id="delay0Btn" class="delay-btn active">0s</button>
+                <button id="delay1Btn" class="delay-btn">1s</button>
+                <button id="delay2Btn" class="delay-btn">2s</button>
+                <button id="delay3Btn" class="delay-btn">3s</button>
+                <button id="delay5Btn" class="delay-btn">5s</button>
+            </div>
+            <button id="restartBtn" class="restart-btn">
+                <span class="btn-icon">🔄</span>
+                <span class="btn-text">Restart with New Delay</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>Test Results</h3>
+        <div class="test-results">
+            <div id="testOutput" class="test-output">
+                <p>Click any test button to see results here...</p>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,0 +1,220 @@
+/* Test Mode App Styles */
+.test-mode-container {
+    padding: 20px;
+    font-family: var(--os-font-family);
+    color: var(--os-text-primary);
+    background: var(--os-bg-primary);
+    height: 100%;
+    overflow-y: auto;
+}
+
+.test-section {
+    margin-bottom: 30px;
+    background: var(--os-bg-secondary);
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid var(--os-border-color);
+}
+
+.test-section h3 {
+    margin: 0 0 15px 0;
+    color: var(--os-text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: 2px solid var(--os-accent);
+    padding-bottom: 8px;
+}
+
+.test-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.test-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: var(--os-bg-tertiary);
+    color: var(--os-text-primary);
+    border: 1px solid var(--os-border-color);
+}
+
+.test-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.test-btn:active {
+    transform: translateY(0);
+}
+
+.btn-icon {
+    font-size: 16px;
+}
+
+.btn-text {
+    flex: 1;
+    text-align: left;
+}
+
+/* Button color variants */
+.settings-btn { background: var(--os-accent); color: var(--os-text-light); }
+.aboutme-btn { background: #6c5ce7; color: var(--os-text-light); }
+.duplicate-btn { background: #ff6b6b; color: var(--os-text-light); }
+.animations-btn { background: #4ecdc4; color: var(--os-text-light); }
+.loading-btn { background: #fdcb6e; color: var(--os-text-light); }
+.loading-screen-btn { background: #a29bfe; color: var(--os-text-light); }
+.desktop-btn { background: #fd79a8; color: var(--os-text-light); }
+.taskbar-btn { background: #00b894; color: var(--os-text-light); }
+.startmenu-btn { background: #e84393; color: var(--os-text-light); }
+.dragdrop-btn { background: #0984e3; color: var(--os-text-light); }
+
+/* Loading Delay Controls */
+.delay-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.delay-info {
+    font-size: 14px;
+    color: var(--os-text-secondary);
+    padding: 10px;
+    background: var(--os-bg-tertiary);
+    border-radius: 4px;
+    border: 1px solid var(--os-border-color);
+}
+
+.delay-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.delay-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--os-border-color);
+    border-radius: 4px;
+    background: var(--os-bg-tertiary);
+    color: var(--os-text-primary);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.delay-btn:hover {
+    background: var(--os-accent);
+    color: var(--os-text-light);
+}
+
+.delay-btn.active {
+    background: #00b894;
+    color: var(--os-text-light);
+    font-weight: bold;
+}
+
+.restart-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: #e74c3c;
+    color: var(--os-text-light);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+}
+
+.restart-btn:hover {
+    background: #c0392b;
+    transform: translateY(-1px);
+}
+
+/* Test Results */
+.test-results {
+    background: var(--os-bg-tertiary);
+    border: 1px solid var(--os-border-color);
+    border-radius: 6px;
+    min-height: 200px;
+}
+
+.test-output {
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--os-text-secondary);
+    max-height: 300px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+
+.test-output p {
+    margin: 0 0 8px 0;
+}
+
+.test-output .success {
+    color: #00b894;
+}
+
+.test-output .error {
+    color: #e74c3c;
+}
+
+.test-output .warning {
+    color: #fdcb6e;
+}
+
+.test-output .info {
+    color: #0984e3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .test-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .delay-buttons {
+        justify-content: center;
+    }
+    
+    .test-mode-container {
+        padding: 15px;
+    }
+    
+    .test-section {
+        padding: 15px;
+    }
+}
+
+/* Scrollbar styling for test output */
+.test-output::-webkit-scrollbar {
+    width: 8px;
+}
+
+.test-output::-webkit-scrollbar-track {
+    background: var(--os-bg-secondary);
+    border-radius: 4px;
+}
+
+.test-output::-webkit-scrollbar-thumb {
+    background: var(--os-border-color);
+    border-radius: 4px;
+}
+
+.test-output::-webkit-scrollbar-thumb:hover {
+    background: var(--os-accent);
+}
