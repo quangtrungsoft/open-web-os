@@ -1,0 +1,33 @@
+{
+  "name": "my-desktop",
+  "version": "1.0.0",
+  "description": "A personal, interactive web-based desktop environment showcasing creativity and skills",
+  "main": "src/html/index.html",
+  "scripts": {
+    "start": "npx serve src/html",
+    "dev": "npx serve src/html -p 3000",
+    "build": "echo 'No build step required - static files only'",
+    "deploy": "echo 'Deploy using GitHub Pages, Netlify, or Vercel'"
+  },
+  "keywords": [
+    "personal-website",
+    "interactive-desktop",
+    "portfolio",
+    "web-development",
+    "creative-coding",
+    "vanilla-javascript"
+  ],
+  "author": "Vu Quang Trung",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/my-desktop.git"
+  },
+  "homepage": "https://yourusername.github.io/my-desktop",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 

@@ -220,7 +220,7 @@ class DesktopIcons {
             this.iconPositions.forEach((position, appId) => {
                 positions[appId] = position;
             });
-            localStorage.setItem('webos_desktop_icon_positions', JSON.stringify(positions));
+            localStorage.setItem('mydesktop_desktop_icon_positions', JSON.stringify(positions));
         } catch (error) {
             console.error('Failed to save icon positions:', error);
         }
@@ -228,7 +228,7 @@ class DesktopIcons {
 
     loadIconPositions() {
         try {
-            const saved = localStorage.getItem('webos_desktop_icon_positions');
+            const saved = localStorage.getItem('mydesktop_desktop_icon_positions');
             if (saved) {
                 const positions = JSON.parse(saved);
                 Object.entries(positions).forEach(([appId, position]) => {

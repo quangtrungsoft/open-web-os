@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebOS - Web Operating System</title>
+    <meta name="description" content="My Desktop - A personal, interactive web-based desktop environment showcasing creativity and skills">
+    <meta name="keywords" content="personal website, interactive desktop, portfolio, web development, creative coding">
+    <meta name="author" content="Vu Quang Trung">
+    <title>My Desktop - Personal Digital Environment</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/animations.css">
     <link rel="stylesheet" href="styles/loading.css">
@@ -15,7 +18,7 @@
             <div class="loading-logo">
                 <div class="windows-logo">⊞</div>
             </div>
-            <div class="loading-text">WebOS</div>
+            <div class="loading-text">My Desktop</div>
             <div class="loading-progress">
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
@@ -29,6 +32,34 @@
 
     <!-- Desktop -->
     <div id="desktop" class="desktop" style="display: none;">
+        <!-- Welcome Message -->
+        <div class="welcome-message">
+            <h1>Welcome to My Desktop</h1>
+            <p>This is my personal digital environment - feel free to explore!</p>
+        </div>
+        
+        <!-- Personal Dashboard Widget -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3>My Dashboard</h3>
+                <span class="widget-time" id="currentTime">--:--</span>
+            </div>
+            <div class="widget-content">
+                <div class="widget-item">
+                    <span class="widget-label">Today</span>
+                    <span class="widget-value" id="currentDate">--</span>
+                </div>
+                <div class="widget-item">
+                    <span class="widget-label">Projects</span>
+                    <span class="widget-value">5 Active</span>
+                </div>
+                <div class="widget-item">
+                    <span class="widget-label">Status</span>
+                    <span class="widget-value available">Available</span>
+                </div>
+            </div>
+        </div>
+        
         <!-- Desktop icons will be added here -->
         
         <!-- Temporary test button -->

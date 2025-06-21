@@ -90,12 +90,14 @@ class DockSettingsControl {
     }
 
     loadDockSettings() {
-        // Load dock position
-        const currentPosition = localStorage.getItem('webos_dock_position') || 'bottom';
-        const radios = this.windowElement.querySelectorAll('input[name="dockPosition"]');
-        radios.forEach(r => r.checked = (r.value === currentPosition));
-        // Load pinned apps
-        this.pinnedApps = JSON.parse(localStorage.getItem('webos_dock_pinned_apps') || '[]');
+        // Load current settings
+        const currentPosition = localStorage.getItem('mydesktop_dock_position') || 'bottom';
+        const positionSelect = document.getElementById('dockPosition');
+        if (positionSelect) {
+            positionSelect.value = currentPosition;
+        }
+        
+        this.pinnedApps = JSON.parse(localStorage.getItem('mydesktop_dock_pinned_apps') || '[]');
         // Load all apps from module loader
         this.allApps = [];
         if (window.moduleLoader && typeof window.moduleLoader.getAllModules === 'function') {
@@ -157,14 +159,14 @@ class DockSettingsControl {
         // Save dock position
         const selected = this.windowElement.querySelector('input[name="dockPosition"]:checked');
         if (selected) {
-            localStorage.setItem('webos_dock_position', selected.value);
+            localStorage.setItem('mydesktop_dock_position', selected.value);
             if (window.taskbar && typeof window.taskbar.setDockPosition === 'function') {
                 window.taskbar.setDockPosition(selected.value);
             }
         }
         // Save pinned apps
         const checked = Array.from(this.windowElement.querySelectorAll('.dock-app-pin:checked')).map(cb => cb.dataset.appId);
-        localStorage.setItem('webos_dock_pinned_apps', JSON.stringify(checked));
+        localStorage.setItem('mydesktop_dock_pinned_apps', JSON.stringify(checked));
         // Emit event to update dock
         if (window.taskbar && typeof window.taskbar.refreshDockItems === 'function') {
             window.taskbar.refreshDockItems();

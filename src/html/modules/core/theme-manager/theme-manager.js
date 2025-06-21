@@ -291,7 +291,7 @@ class ThemeManager {
      */
     loadSavedTheme() {
         try {
-            const savedTheme = localStorage.getItem('webos-theme');
+            const savedTheme = localStorage.getItem('mydesktop-theme');
             if (savedTheme && this.themes.has(savedTheme)) {
                 this.applyTheme(savedTheme);
             } else {
@@ -309,7 +309,7 @@ class ThemeManager {
      */
     saveTheme() {
         try {
-            localStorage.setItem('webos-theme', this.currentTheme);
+            localStorage.setItem('mydesktop-theme', this.currentTheme);
         } catch (error) {
             console.error('Failed to save theme:', error);
         }

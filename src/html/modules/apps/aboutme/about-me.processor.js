@@ -86,18 +86,71 @@ class AboutMeProcessor {
                 title: 'About Me',
                 icon: '👤',
                 content: template,
-                width: 600,
+                width: 680,
                 height: 500,
                 resizable: true,
                 centered: true,
                 draggable: true,
                 data: {
+                    fullName: 'Vu Quang Trung',
+                    avatar: 'modules/apps/aboutme/images/vu-quang-trung.jpg',
+                    tagline: '⚡NET Team Lead | Senior Software Architect | Database optimization⚡',
+                    introduction: `I am a software engineer with a passion for building scalable and efficient systems. 
+                    I have a strong background in .NET development and have worked on a variety of projects, 
+                    including e-commerce platforms, mobile applications, and web services.`,
+                    email: 'trungvu.evolution@gmail.com',
+                    linkedin: 'https://www.linkedin.com/in/vu-quang-trung',
+                    github: 'https://github.com/quangtrungsoft',
                     projects: [
-                        'WebOS',
-                        'E-commerce Platforms',
-                        'Mobile Applications',
-                        'Web Services & APIs',
-                        'Desktop Applications'
+                        {
+                            title: 'WebOS open source',
+                            description: `WebOS is a modern, open-source operating system designed for the web. 
+                            It is built on top of the WebOS API and provides a rich set of features for building web applications.`,
+                            links: [
+                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/WebOS' },
+                                { label: 'Live Demo', url: '#' }
+                            ]
+                        },
+                        {
+                            title: 'BreadMaster',
+                            description: 'Artisan bread recipe tracker and community platform built with modern web technologies.',
+                            links: [
+                                { label: 'Live Demo', url: 'https://breadmaster.app' },
+                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/breadmaster' }
+                            ]
+                        },
+                        {
+                            title: 'ERPify',
+                            description: 'Modular ERP system designed for small businesses with customizable modules.',
+                            links: [
+                                { label: 'Documentation', url: 'https://erpify.dev' },
+                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/erpify' }
+                            ]
+                        },
+                        {
+                            title: 'RecipeShare',
+                            description: 'Social platform for sharing and discovering recipes with community features.',
+                            links: [
+                                { label: 'Live Demo', url: 'https://recipeshare.social' },
+                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/recipeshare' }
+                            ]
+                        },
+                        {
+                            title: 'TaskFlow',
+                            description: 'Productivity app for managing daily tasks and building better habits.',
+                            links: [
+                                { label: 'Live Demo', url: 'https://taskflow.app' },
+                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/taskflow' }
+                            ]
+                        },
+                        {
+                            title: 'BakeCam',
+                            description: 'Smart camera app for monitoring bread proofing and baking with AI assistance.',
+                            links: [
+                                { label: 'App Store', url: 'https://apps.apple.com/bakecam' },
+                                { label: 'GitHub', url: 'https://github.com/quangtrungsoft/bakecam' }
+                            ]
+                        }
                     ]
                 },
                 onWindowCreated: (windowElement) => {

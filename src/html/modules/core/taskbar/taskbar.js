@@ -82,7 +82,7 @@ class Taskbar {
     }
 
     getDockPosition() {
-        return localStorage.getItem('webos_dock_position') || 'bottom';
+        return localStorage.getItem('mydesktop_dock_position') || 'bottom';
     }
 
     setDockPosition(position) {
@@ -101,7 +101,7 @@ class Taskbar {
             default:
                 this.taskbarElement.classList.add('dock-bottom');
         }
-        localStorage.setItem('webos_dock_position', position);
+        localStorage.setItem('mydesktop_dock_position', position);
     }
 
     /**
@@ -183,10 +183,10 @@ class Taskbar {
         const dockItems = this.taskbarElement.querySelector('.dock-items');
         if (!dockItems) return;
         dockItems.innerHTML = '';
-        // Get pinned apps from localStorage
+        // Load pinned apps from localStorage
         let pinned = [];
         try {
-            pinned = JSON.parse(localStorage.getItem('webos_dock_pinned_apps') || '[]');
+            pinned = JSON.parse(localStorage.getItem('mydesktop_dock_pinned_apps') || '[]');
         } catch {}
         // Get all available apps from moduleLoader
         let allApps = [];
