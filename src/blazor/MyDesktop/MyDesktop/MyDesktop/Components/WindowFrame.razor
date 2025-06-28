@@ -1,0 +1,47 @@
+@inject IJSRuntime JS
+@inherits OwningComponentBase
+@typeparam TContent
+
+<div class="window-frame @(IsActive ? "active" : "")" style="left:@Position.x px; top:@Position.y px; width:@Size.w px; height:@Size.h px; z-index:@ZIndex; position:absolute;" @onmousedown="HandleFocus">
+    <div class="window-titlebar" @onmousedown="StartDrag">
+        <span class="window-dot red"></span>
+        <span class="window-dot yellow"></span>
+        <span class="window-dot green"></span>
+        <span class="window-title">@Title</span>
+        <button class="window-close" @onclick="OnClose">×</button>
+    </div>
+    <div class="window-content">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public int ZIndex { get; set; }
+    [Parameter] public (int x, int y) Position { get; set; }
+    [Parameter] public (int w, int h) Size { get; set; }
+    [Parameter] public bool IsActive { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback OnFocus { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private bool dragging = false;
+    private int dragOffsetX, dragOffsetY;
+
+    void HandleFocus()
+    {
+        if (OnFocus.HasDelegate)
+            OnFocus.InvokeAsync();
+    }
+
+    void StartDrag(MouseEventArgs e)
+    {
+        dragging = true;
+        dragOffsetX = (int)e.ClientX - Position.x;
+        dragOffsetY = (int)e.ClientY - Position.y;
+        // Đăng ký sự kiện mousemove, mouseup toàn cục
+        JS.InvokeVoidAsync("window.addEventListener", "mousemove", DotNetObjectReference.Create(this));
+        JS.InvokeVoidAsync("window.addEventListener", "mouseup", DotNetObjectReference.Create(this));
+    }
+    // Để đơn giản, logic drag thực tế sẽ bổ sung sau hoặc dùng JSInterop
+} 

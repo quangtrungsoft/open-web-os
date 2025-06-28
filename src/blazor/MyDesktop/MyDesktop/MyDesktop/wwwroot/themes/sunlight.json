@@ -1,0 +1,39 @@
+{
+  "themeId": "sunlight",
+  "name": "Sun Light",
+  "description": "Bright, warm, and friendly yellow theme.",
+  "darkMode": false,
+  "colors": {
+    "os-bg": "#FFFBEA",
+    "os-bg-dark": "#FFF8DC",
+    "os-accent": "#FFD700",
+    "os-accent-light": "#FFFACD",
+    "os-accent-dark": "#FFB300",
+    "os-text": "#1D1D1F",
+    "os-text-secondary": "#888888",
+    "os-text-light": "#333333",
+    "os-border": "#E0C97F",
+    "os-border-light": "#FFF8DC",
+    "os-shadow": "rgba(255, 215, 0, 0.2)",
+    "os-shadow-dark": "rgba(255, 215, 0, 0.4)"
+  },
+  "gradients": {
+    "desktop": "linear-gradient(135deg, #FFFBEA 0%, #FFD700 100%)"
+  },
+  "typography": {
+    "fontFamily": "San Francisco, Arial, sans-serif",
+    "fontSize": "16px"
+  },
+  "components": {
+    "window": { "shadow": "0 4px 24px rgba(255,215,0,0.2)", "borderRadius": "10px" },
+    "taskbar": { "background": "rgba(255, 250, 205, 0.98)" },
+    "scrollbar": { "track": "#FFF8DC", "thumb": "#FFD700", "thumbHover": "#FFB300" }
+  },
+  "rules": [
+    { "name": "color-count", "description": "At least 10 color variables", "min": 10 },
+    { "name": "has-gradient-desktop", "description": "Desktop must have a gradient background" },
+    { "name": "window-shadow", "description": "Window must define shadow" },
+    { "name": "taskbar-bg", "description": "Taskbar must have background" },
+    { "name": "scrollbar-style", "description": "Scrollbar must have track, thumb, thumb-hover colors" }
+  ]
+} 

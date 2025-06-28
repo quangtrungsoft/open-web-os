@@ -1,0 +1,48 @@
+@using MyDesktop.Components
+@inject IWindowManager WindowManager
+
+<div class="desktop">
+    <div class="desktop-icons">
+        <button @onclick='() => OpenApp("Terminal", typeof(TerminalComponent))'>Terminal</button>
+        <button @onclick='() => OpenApp("Processes", typeof(ProcessListComponent))'>Processes</button>
+        <button @onclick='() => OpenApp("Memory", typeof(MemoryMapComponent))'>Memory</button>
+        <button @onclick='() => OpenApp("Files", typeof(FileBrowserComponent))'>Files</button>
+    </div>
+    @foreach (var win in WindowManager.Windows.OrderBy(w => w.ZIndex))
+    {
+        <WindowFrame TContent="object" Title="@win.Title"
+                     ZIndex="@win.ZIndex"
+                     Position="@win.Position"
+                     Size="@win.Size"
+                     IsActive="@win.IsActive"
+                     OnClose="() => WindowManager.CloseWindow(win.Id)"
+                     OnFocus="() => WindowManager.FocusWindow(win.Id)">
+            <DynamicComponent Type="@win.ComponentType" Parameters="@win.Parameters" />
+        </WindowFrame>
+    }
+    <Dock OnOpenApp="HandleOpenApp" />
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        WindowManager.OnWindowsChanged += OnWindowsChangedHandler;
+    }
+    void OnWindowsChangedHandler()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+    void OpenApp(string title, Type componentType)
+    {
+        WindowManager.OpenWindow(title, componentType);
+    }
+    private Task HandleOpenApp((string, Type) args)
+    {
+        WindowManager.OpenWindow(args.Item1, args.Item2);
+        return Task.CompletedTask;
+    }
+    public void Dispose()
+    {
+        WindowManager.OnWindowsChanged -= OnWindowsChangedHandler;
+    }
+} 

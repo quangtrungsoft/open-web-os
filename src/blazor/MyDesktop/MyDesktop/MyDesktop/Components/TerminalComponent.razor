@@ -1,0 +1,23 @@
+@namespace MyDesktop.Components
+@inject ISimulationEngine Engine
+
+<div class="terminal">
+    <pre>@output</pre>
+    <input @bind="command" @onkeydown="HandleKey" class="terminal-input" />
+</div>
+
+@code {
+    string command = string.Empty;
+    string output = "Welcome to BlazorOS Terminal!\nType 'run <name>', 'ps', 'kill <pid>'...";
+
+    void HandleKey(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            output += $"\n$ {command}\n";
+            var result = Engine.Scheduler.ExecuteCommand(command);
+            output += result + "\n";
+            command = string.Empty;
+        }
+    }
+} 

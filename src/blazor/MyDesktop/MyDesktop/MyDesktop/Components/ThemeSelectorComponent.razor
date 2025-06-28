@@ -1,0 +1,109 @@
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject MyDesktop.Services.OrchestratorService Orchestrator
+@inject IJSRuntime JS
+@inject NavigationManager Nav
+
+<select @onchange="OnThemeSelected">
+    <option value="">-- Select Theme --</option>
+    @foreach (var theme in Themes)
+    {
+        <option value="@theme.ThemeId">@theme.Name</option>
+    }
+</select>
+<button class="button" @onclick="PreviewTheme" disabled="@(!CanPreview)">Preview</button>
+<button class="button" @onclick="ApplyTheme" disabled="@(!CanPreview)">Apply</button>
+@if (ErrorMessages.Count > 0)
+{
+    <ul class="theme-errors">
+        @foreach (var err in ErrorMessages)
+        {
+            <li>@err</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<MyDesktop.Models.ThemeManifest> Themes = new();
+    private List<string> ErrorMessages = new();
+    private MyDesktop.Models.ThemeManifest? SelectedTheme;
+    private string? SelectedThemeId;
+    private bool CanPreview => SelectedTheme != null;
+    private MyDesktop.Models.ThemeManifest? ThemeToApplyOnRender;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var themeFiles = new[] { "darknight.json", "sunlight.json", "macosnight.json" };
+        var baseUri = Nav.BaseUri.TrimEnd('/');
+        foreach (var file in themeFiles)
+        {
+            var theme = await Http.GetFromJsonAsync<MyDesktop.Models.ThemeManifest>($"{baseUri}/themes/{file}");
+            if (theme != null) Themes.Add(theme);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Load themeId từ localStorage nếu có
+            var savedThemeId = await JS.InvokeAsync<string>("localStorage.getItem", "themeId");
+            if (!string.IsNullOrEmpty(savedThemeId))
+            {
+                var theme = Themes.FirstOrDefault(t => t.ThemeId == savedThemeId);
+                if (theme != null)
+                {
+                    SelectedTheme = theme;
+                    SelectedThemeId = theme.ThemeId;
+                    ThemeToApplyOnRender = theme; // Đánh dấu sẽ apply theme sau khi render
+                    Orchestrator.InstallTheme(theme); // Đảm bảo Orchestrator có theme hiện tại
+                    StateHasChanged();
+                }
+            }
+        }
+
+        if (ThemeToApplyOnRender != null)
+        {
+            await ApplyThemeCss(ThemeToApplyOnRender);
+            ThemeToApplyOnRender = null;
+        }
+    }
+
+    private void OnThemeSelected(ChangeEventArgs e)
+    {
+        SelectedThemeId = e.Value?.ToString();
+        SelectedTheme = Themes.FirstOrDefault(t => t.ThemeId == SelectedThemeId);
+        ErrorMessages.Clear();
+    }
+
+    private async Task PreviewTheme()
+    {
+        if (SelectedTheme != null)
+        {
+            await ApplyThemeCss(SelectedTheme);
+        }
+    }
+
+    private async Task ApplyTheme()
+    {
+        if (SelectedTheme != null)
+        {
+            var result = Orchestrator.InstallTheme(SelectedTheme);
+            ErrorMessages = result.IsValid ? new List<string>() : result.Errors;
+            if (result.IsValid)
+            {
+                await ApplyThemeCss(SelectedTheme);
+                // Lưu themeId vào localStorage
+                await JS.InvokeVoidAsync("localStorage.setItem", "themeId", SelectedTheme.ThemeId);
+            }
+        }
+    }
+
+    private async Task ApplyThemeCss(MyDesktop.Models.ThemeManifest theme)
+    {
+        var cssVars = new Dictionary<string, string>(theme.Colors);
+        if (theme.Gradients.TryGetValue("desktop", out var desktopGradient))
+            cssVars["desktop-gradient"] = desktopGradient;
+        await JS.InvokeVoidAsync("themeInterop.setCssVariables", cssVars);
+    }
+} 

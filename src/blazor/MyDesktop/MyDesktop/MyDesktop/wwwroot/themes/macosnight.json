@@ -1,0 +1,39 @@
+{
+  "themeId": "macosnight",
+  "name": "macOS Night",
+  "description": "Classic macOS dark blue night theme.",
+  "darkMode": true,
+  "colors": {
+    "os-bg": "#1E1E28",
+    "os-bg-dark": "#181825",
+    "os-accent": "#5E5CE6",
+    "os-accent-light": "#A5A3FF",
+    "os-accent-dark": "#3B3B6D",
+    "os-text": "#F5F5F7",
+    "os-text-secondary": "#8E8E93",
+    "os-text-light": "#FFFFFF",
+    "os-border": "#23232B",
+    "os-border-light": "#2C2C34",
+    "os-shadow": "rgba(30, 30, 40, 0.7)",
+    "os-shadow-dark": "rgba(30, 30, 40, 0.9)"
+  },
+  "gradients": {
+    "desktop": "linear-gradient(135deg, #23232B 0%, #1E1E28 100%)"
+  },
+  "typography": {
+    "fontFamily": "San Francisco, Arial, sans-serif",
+    "fontSize": "16px"
+  },
+  "components": {
+    "window": { "shadow": "0 4px 24px rgba(30,30,40,0.8)", "borderRadius": "10px" },
+    "taskbar": { "background": "rgba(30, 30, 40, 0.98)" },
+    "scrollbar": { "track": "#23232B", "thumb": "#5E5CE6", "thumbHover": "#A5A3FF" }
+  },
+  "rules": [
+    { "name": "color-count", "description": "At least 10 color variables", "min": 10 },
+    { "name": "has-gradient-desktop", "description": "Desktop must have a gradient background" },
+    { "name": "window-shadow", "description": "Window must define shadow" },
+    { "name": "taskbar-bg", "description": "Taskbar must have background" },
+    { "name": "scrollbar-style", "description": "Scrollbar must have track, thumb, thumb-hover colors" }
+  ]
+} 

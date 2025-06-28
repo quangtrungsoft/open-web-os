@@ -44,3 +44,6 @@ temp/
 # Compiled CSS (if using SCSS)
 # Uncomment if you want to ignore compiled CSS
 # styles/main.css 
+/src/blazor/MyDesktop/MyDesktop/MyDesktop.Client/obj
+/src/blazor/MyDesktop/MyDesktop/MyDesktop.Client/bin
+/src/blazor/MyDesktop/.vs

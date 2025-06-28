@@ -1,0 +1,63 @@
+{
+  "themeId": "darknight",
+  "name": "Dark Night",
+  "description": "Super dark, eye shield, gentle green accent.",
+  "darkMode": true,
+  "colors": {
+    "os-bg": "#101010",
+    "os-bg-dark": "#070707",
+    "os-accent": "#1db954",
+    "os-accent-light": "#25e86a",
+    "os-accent-dark": "#12803a",
+    "os-text": "#e0e0e0",
+    "os-text-secondary": "#888888",
+    "os-text-light": "#ffffff",
+    "os-border": "#222222",
+    "os-border-light": "#333333",
+    "os-shadow": "rgba(0, 0, 0, 0.7)",
+    "os-shadow-dark": "rgba(0, 0, 0, 0.9)",
+    "taskbar-bg": "rgba(10, 10, 10, 0.98)",
+    "taskbar-bg-hover": "rgba(29, 185, 84, 0.08)",
+    "taskbar-bg-active": "rgba(29, 185, 84, 0.15)",
+    "start-menu-bg": "rgba(10, 10, 10, 0.99)",
+    "start-menu-item-hover": "rgba(29, 185, 84, 0.08)",
+    "window-shadow": "0 4px 24px rgba(0,0,0,0.8)",
+    "scrollbar-track-color": "#181818",
+    "scrollbar-thumb-color": "#333",
+    "scrollbar-thumb-hover-color": "#444"
+  },
+  "gradients": {
+    "desktop": "linear-gradient(135deg, #181818 0%, #101010 100%)"
+  },
+  "typography": {
+    "fontFamily": "San Francisco, Arial, sans-serif",
+    "fontSize": "16px"
+  },
+  "components": {
+    "window": {
+      "shadow": "var(--window-shadow)",
+      "borderRadius": "10px"
+    },
+    "taskbar": {
+      "background": "var(--taskbar-bg)",
+      "hover": "var(--taskbar-bg-hover)",
+      "active": "var(--taskbar-bg-active)"
+    },
+    "startMenu": {
+      "background": "var(--start-menu-bg)",
+      "itemHover": "var(--start-menu-item-hover)"
+    },
+    "scrollbar": {
+      "track": "var(--scrollbar-track-color)",
+      "thumb": "var(--scrollbar-thumb-color)",
+      "thumbHover": "var(--scrollbar-thumb-hover-color)"
+    }
+  },
+  "rules": [
+    { "name": "color-count", "description": "At least 10 color variables", "min": 10 },
+    { "name": "has-gradient-desktop", "description": "Desktop must have a gradient background" },
+    { "name": "window-shadow", "description": "Window must define shadow" },
+    { "name": "taskbar-bg", "description": "Taskbar must have background and hover/active states" },
+    { "name": "scrollbar-style", "description": "Scrollbar must have track, thumb, thumb-hover colors" }
+  ]
+} 

@@ -1,0 +1,17 @@
+<div class="dock">
+    <div class="dock-icon" @onclick='() => OpenApp("Terminal", typeof(TerminalComponent))'>
+        <img src="icons/terminal.svg" alt="Terminal" />
+    </div>
+    <div class="dock-icon" @onclick='() => OpenApp("Processes", typeof(ProcessListComponent))'>
+        <img src="icons/process.svg" alt="Processes" />
+    </div>
+    <div class="dock-icon" @onclick='() => OpenApp("Files", typeof(FileBrowserComponent))'>
+        <img src="icons/files.svg" alt="Files" />
+    </div>
+    <!-- Thêm các icon khác nếu muốn -->
+</div>
+
+@code {
+    [Parameter] public EventCallback<(string, Type)> OnOpenApp { get; set; }
+    void OpenApp(string title, Type type) => OnOpenApp.InvokeAsync((title, type));
+} 
