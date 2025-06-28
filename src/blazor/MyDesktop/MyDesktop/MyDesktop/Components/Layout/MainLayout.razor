@@ -1,13 +1,17 @@
 @inherits LayoutComponentBase
 
-<div class="page">
-    <div style="position:fixed;top:12px;right:24px;z-index:3000;">
+<div class="main-layout">
+    <!-- Menu Bar -->
+    <MenuBar />
+    
+    <!-- Theme Selector -->
+    <div class="theme-selector-container">
         <ThemeSelectorComponent />
     </div>
-    <main>
-        <article class="content px-4">
-            @Body
-        </article>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        @Body
     </main>
 </div>
 
@@ -16,3 +20,50 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+<style>
+.main-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--layout-background, var(--color-background));
+    color: var(--layout-text-color, var(--color-text-primary));
+    font-family: var(--typography-font-family-primary);
+}
+
+.theme-selector-container {
+    position: fixed;
+    top: var(--theme-selector-top, calc(var(--menu-bar-height, 2rem) + var(--spacing-3)));
+    right: var(--theme-selector-right, var(--spacing-6));
+    z-index: var(--layout-z-index-fixed);
+    background: var(--theme-selector-background, var(--color-surface-primary));
+    border: var(--theme-selector-border, 1px solid var(--color-border-primary));
+    border-radius: var(--theme-selector-border-radius, var(--border-radius-lg));
+    box-shadow: var(--theme-selector-shadow, var(--shadow-md));
+    backdrop-filter: var(--theme-selector-backdrop-filter, blur(10px));
+    padding: var(--theme-selector-padding, var(--spacing-2));
+}
+
+.main-content {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Responsive adjustments */
+@@media (max-width: var(--layout-breakpoint-md)) {
+    .theme-selector-container {
+        top: calc(var(--menu-bar-height, 2rem) + var(--spacing-2));
+        right: var(--spacing-3);
+        padding: var(--spacing-1);
+    }
+}
+
+@@media (max-width: var(--layout-breakpoint-sm)) {
+    .theme-selector-container {
+        top: calc(var(--menu-bar-height-mobile, 1.75rem) + var(--spacing-1));
+        right: var(--spacing-2);
+        padding: var(--spacing-1);
+    }
+}
+</style>

@@ -1,10 +1,376 @@
+@inject IJSRuntime JS
+
 <div class="menu-bar">
-    <span class="menu-item"></span>
-    <span class="menu-item">File</span>
-    <span class="menu-item">Edit</span>
-    <span class="menu-item">View</span>
-    <span class="menu-item">Go</span>
-    <span class="menu-item">Window</span>
-    <span class="menu-item">Help</span>
-    <!-- Có thể thêm dynamic menu nếu muốn -->
-</div> 
+    <div class="menu-bar-left">
+        <button class="menu-item menu-apple" @onclick="ToggleSystemMenu">
+            <span class="menu-apple-icon">&#8984;</span>
+        </button>
+        <div class="menu-divider"></div>
+        <div class="menu-group">
+            <button class="menu-item" @onclick='() => OpenMenu("file")'>File</button>
+            <button class="menu-item" @onclick='() => OpenMenu("edit")'>Edit</button>
+            <button class="menu-item" @onclick='() => OpenMenu("view")'>View</button>
+            <button class="menu-item" @onclick='() => OpenMenu("go")'>Go</button>
+            <button class="menu-item" @onclick='() => OpenMenu("window")'>Window</button>
+            <button class="menu-item" @onclick='() => OpenMenu("help")'>Help</button>
+        </div>
+    </div>
+    
+    <div class="menu-bar-right">
+        <div class="menu-status">
+            <span class="menu-status-text">Ready</span>
+        </div>
+        <div class="menu-divider"></div>
+        <div class="menu-controls">
+            <button class="menu-control-btn" @onclick="MinimizeAll" title="Minimize All">
+                <span class="menu-control-icon">&#8722;</span>
+            </button>
+            <button class="menu-control-btn" @onclick="ShowDesktop" title="Show Desktop">
+                <span class="menu-control-icon">&#8862;</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- System Menu Dropdown -->
+@if (showSystemMenu)
+{
+    <div class="menu-dropdown system-menu" style="top: @menuPosition.y px; left: @menuPosition.x px;">
+        <div class="menu-dropdown-item" @onclick='() => OpenSystemPreference("general")'>
+            <span class="menu-dropdown-icon">&#9881;</span>
+            <span class="menu-dropdown-text">System Preferences</span>
+        </div>
+        <div class="menu-dropdown-item" @onclick='() => OpenSystemPreference("appearance")'>
+            <span class="menu-dropdown-icon">&#127912;</span>
+            <span class="menu-dropdown-text">Appearance</span>
+        </div>
+        <div class="menu-dropdown-divider"></div>
+        <div class="menu-dropdown-item" @onclick="AboutSystem">
+            <span class="menu-dropdown-icon">&#8505;</span>
+            <span class="menu-dropdown-text">About This System</span>
+        </div>
+        <div class="menu-dropdown-item" @onclick="RestartSystem">
+            <span class="menu-dropdown-icon">&#8635;</span>
+            <span class="menu-dropdown-text">Restart</span>
+        </div>
+        <div class="menu-dropdown-item" @onclick="ShutdownSystem">
+            <span class="menu-dropdown-icon">&#9207;</span>
+            <span class="menu-dropdown-text">Shut Down</span>
+        </div>
+    </div>
+}
+
+<style>
+.menu-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--menu-bar-height, 2rem);
+    background: var(--menu-bar-background, var(--color-surface-primary));
+    color: var(--menu-bar-text-color, var(--color-text-primary));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-4);
+    font-family: var(--typography-font-family-primary);
+    font-size: var(--menu-bar-font-size, var(--typography-font-size-sm));
+    font-weight: var(--menu-bar-font-weight, var(--typography-font-weight-medium));
+    z-index: var(--layout-z-index-fixed);
+    backdrop-filter: var(--menu-bar-backdrop-filter, blur(10px));
+    border-bottom: var(--menu-bar-border-bottom, 1px solid var(--color-border-primary));
+    user-select: none;
+    transition: var(--animation-transition-all);
+}
+
+.menu-bar-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.menu-bar-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.menu-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+}
+
+.menu-item {
+    background: none;
+    border: none;
+    color: var(--menu-bar-text-color, var(--color-text-primary));
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    padding: var(--menu-item-padding, var(--spacing-2) var(--spacing-3));
+    border-radius: var(--menu-item-border-radius, var(--border-radius-sm));
+    cursor: pointer;
+    transition: var(--animation-transition-all);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    position: relative;
+}
+
+.menu-item:hover {
+    background: var(--menu-item-hover-background, var(--color-surface-hover));
+    color: var(--menu-item-hover-text-color, var(--color-text-primary));
+}
+
+.menu-item:active {
+    background: var(--menu-item-active-background, var(--color-surface-active));
+}
+
+.menu-item:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.menu-apple {
+    font-weight: var(--typography-font-weight-bold);
+    font-size: var(--menu-apple-font-size, var(--typography-font-size-lg));
+}
+
+.menu-apple-icon {
+    font-family: var(--typography-font-family-mono);
+}
+
+.menu-divider {
+    width: 1px;
+    height: var(--menu-divider-height, 1rem);
+    background: var(--menu-divider-color, var(--color-border-secondary));
+    margin: 0 var(--spacing-1);
+}
+
+.menu-status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.menu-status-text {
+    color: var(--menu-status-text-color, var(--color-text-secondary));
+    font-size: var(--menu-status-font-size, var(--typography-font-size-xs));
+}
+
+.menu-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+}
+
+.menu-control-btn {
+    background: none;
+    border: none;
+    color: var(--menu-control-btn-color, var(--color-text-secondary));
+    font-family: var(--typography-font-family-mono);
+    font-size: var(--menu-control-btn-font-size, var(--typography-font-size-sm));
+    padding: var(--menu-control-btn-padding, var(--spacing-1));
+    border-radius: var(--menu-control-btn-border-radius, var(--border-radius-sm));
+    cursor: pointer;
+    transition: var(--animation-transition-all);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--menu-control-btn-size, 1.5rem);
+    height: var(--menu-control-btn-size, 1.5rem);
+}
+
+.menu-control-btn:hover {
+    background: var(--menu-control-btn-hover-background, var(--color-surface-hover));
+    color: var(--menu-control-btn-hover-color, var(--color-text-primary));
+}
+
+.menu-control-btn:active {
+    background: var(--menu-control-btn-active-background, var(--color-surface-active));
+}
+
+.menu-control-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.menu-control-icon {
+    font-weight: var(--typography-font-weight-bold);
+}
+
+/* Menu Dropdown */
+.menu-dropdown {
+    position: fixed;
+    background: var(--menu-dropdown-background, var(--color-surface-primary));
+    border: var(--menu-dropdown-border, 1px solid var(--color-border-primary));
+    border-radius: var(--menu-dropdown-border-radius, var(--border-radius-lg));
+    box-shadow: var(--menu-dropdown-shadow, var(--shadow-lg));
+    min-width: var(--menu-dropdown-min-width, 200px);
+    z-index: var(--layout-z-index-dropdown);
+    backdrop-filter: var(--menu-dropdown-backdrop-filter, blur(10px));
+    overflow: hidden;
+    animation: menuSlideDown var(--animation-duration-fast) ease-out;
+}
+
+@@keyframes menuSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menu-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--menu-dropdown-item-padding, var(--spacing-3) var(--spacing-4));
+    color: var(--menu-dropdown-item-text-color, var(--color-text-primary));
+    cursor: pointer;
+    transition: var(--animation-transition-all);
+    font-size: var(--menu-dropdown-item-font-size, var(--typography-font-size-sm));
+}
+
+.menu-dropdown-item:hover {
+    background: var(--menu-dropdown-item-hover-background, var(--color-surface-hover));
+}
+
+.menu-dropdown-item:active {
+    background: var(--menu-dropdown-item-active-background, var(--color-surface-active));
+}
+
+.menu-dropdown-icon {
+    width: var(--menu-dropdown-icon-size, 1rem);
+    height: var(--menu-dropdown-icon-size, 1rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--menu-dropdown-icon-font-size, var(--typography-font-size-sm));
+}
+
+.menu-dropdown-text {
+    flex: 1;
+    font-weight: var(--menu-dropdown-text-font-weight, var(--typography-font-weight-medium));
+}
+
+.menu-dropdown-divider {
+    height: 1px;
+    background: var(--menu-dropdown-divider-color, var(--color-border-secondary));
+    margin: var(--spacing-1) 0;
+}
+
+/* Responsive adjustments */
+@@media (max-width: var(--layout-breakpoint-md)) {
+    .menu-bar {
+        padding: 0 var(--spacing-2);
+        font-size: var(--typography-font-size-xs);
+    }
+    
+    .menu-item {
+        padding: var(--spacing-1) var(--spacing-2);
+    }
+    
+    .menu-group {
+        gap: 0;
+    }
+    
+    .menu-status {
+        display: none;
+    }
+}
+
+@@media (max-width: var(--layout-breakpoint-sm)) {
+    .menu-bar {
+        height: var(--menu-bar-height-mobile, 1.75rem);
+        padding: 0 var(--spacing-1);
+    }
+    
+    .menu-item {
+        padding: var(--spacing-1);
+        font-size: var(--typography-font-size-xs);
+    }
+    
+    .menu-controls {
+        display: none;
+    }
+}
+</style>
+
+@code {
+    private bool showSystemMenu = false;
+    private (int x, int y) menuPosition = (0, 0);
+
+    private void ToggleSystemMenu()
+    {
+        showSystemMenu = !showSystemMenu;
+        if (showSystemMenu)
+        {
+            // Position menu below the apple button
+            menuPosition = (10, 32);
+        }
+    }
+
+    private void OpenMenu(string menuName)
+    {
+        // Handle menu opening logic
+        Console.WriteLine($"Opening {menuName} menu");
+    }
+
+    private void OpenSystemPreference(string preference)
+    {
+        showSystemMenu = false;
+        Console.WriteLine($"Opening {preference} preference");
+    }
+
+    private void AboutSystem()
+    {
+        showSystemMenu = false;
+        Console.WriteLine("About system clicked");
+    }
+
+    private void RestartSystem()
+    {
+        showSystemMenu = false;
+        Console.WriteLine("Restart system clicked");
+    }
+
+    private void ShutdownSystem()
+    {
+        showSystemMenu = false;
+        Console.WriteLine("Shutdown system clicked");
+    }
+
+    private void MinimizeAll()
+    {
+        Console.WriteLine("Minimize all windows");
+    }
+
+    private void ShowDesktop()
+    {
+        Console.WriteLine("Show desktop");
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Close menu when clicking outside
+            JS.InvokeVoidAsync("addEventListener", "click", DotNetObjectReference.Create(this));
+        }
+    }
+
+    [JSInvokable]
+    public void OnDocumentClick()
+    {
+        if (showSystemMenu)
+        {
+            showSystemMenu = false;
+            StateHasChanged();
+        }
+    }
+} 

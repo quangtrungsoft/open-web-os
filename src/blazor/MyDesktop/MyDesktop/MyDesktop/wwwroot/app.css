@@ -1,3 +1,6 @@
+/* Import Design System */
+@import url('design-system.css');
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -57,6 +60,59 @@ h1:focus {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
+}
+
+/* Theme validation styles */
+.theme-errors {
+    background-color: #fee;
+    border: 1px solid #fcc;
+    border-radius: 4px;
+    padding: 12px;
+    margin: 8px 0;
+    color: #c33;
+}
+
+.theme-errors h4 {
+    margin: 0 0 8px 0;
+    color: #a00;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.theme-errors ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.theme-errors li {
+    margin: 4px 0;
+    font-size: 13px;
+}
+
+.theme-warnings {
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 4px;
+    padding: 12px;
+    margin: 8px 0;
+    color: #856404;
+}
+
+.theme-warnings h4 {
+    margin: 0 0 8px 0;
+    color: #856404;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.theme-warnings ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.theme-warnings li {
+    margin: 4px 0;
+    font-size: 13px;
 }
 
 body, .desktop {

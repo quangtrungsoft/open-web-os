@@ -1,17 +1,316 @@
+@inject IJSRuntime JS
+
 <div class="dock">
-    <div class="dock-icon" @onclick='() => OpenApp("Terminal", typeof(TerminalComponent))'>
-        <img src="icons/terminal.svg" alt="Terminal" />
+    <div class="dock-container">
+        <div class="dock-icon" @onclick='() => OpenApp("Terminal", typeof(TerminalComponent))'>
+            <div class="dock-icon-content">
+                <div class="dock-icon-image">
+                    <span class="dock-icon-symbol">&#9000;</span>
+                </div>
+                <span class="dock-icon-label">Terminal</span>
+            </div>
+        </div>
+        
+        <div class="dock-icon" @onclick='() => OpenApp("Processes", typeof(ProcessListComponent))'>
+            <div class="dock-icon-content">
+                <div class="dock-icon-image">
+                    <span class="dock-icon-symbol">&#9881;</span>
+                </div>
+                <span class="dock-icon-label">Processes</span>
+            </div>
+        </div>
+        
+        <div class="dock-icon" @onclick='() => OpenApp("Files", typeof(FileBrowserComponent))'>
+            <div class="dock-icon-content">
+                <div class="dock-icon-image">
+                    <span class="dock-icon-symbol">&#128193;</span>
+                </div>
+                <span class="dock-icon-label">Files</span>
+            </div>
+        </div>
+        
+        <div class="dock-icon" @onclick='() => OpenApp("Memory", typeof(MemoryMapComponent))'>
+            <div class="dock-icon-content">
+                <div class="dock-icon-image">
+                    <span class="dock-icon-symbol">&#129504;</span>
+                </div>
+                <span class="dock-icon-label">Memory</span>
+            </div>
+        </div>
     </div>
-    <div class="dock-icon" @onclick='() => OpenApp("Processes", typeof(ProcessListComponent))'>
-        <img src="icons/process.svg" alt="Processes" />
-    </div>
-    <div class="dock-icon" @onclick='() => OpenApp("Files", typeof(FileBrowserComponent))'>
-        <img src="icons/files.svg" alt="Files" />
-    </div>
-    <!-- Thêm các icon khác nếu muốn -->
 </div>
+
+<style>
+.dock {
+    position: fixed;
+    left: 50%;
+    bottom: var(--dock-bottom-position, var(--spacing-6));
+    transform: translateX(-50%);
+    z-index: var(--layout-z-index-fixed);
+    pointer-events: none;
+}
+
+.dock-container {
+    background: var(--dock-background, var(--color-surface-primary));
+    border: var(--dock-border, 1px solid var(--color-border-primary));
+    border-radius: var(--dock-border-radius, var(--border-radius-xl));
+    box-shadow: var(--dock-shadow, var(--shadow-lg));
+    display: flex;
+    gap: var(--dock-icon-gap, var(--spacing-3));
+    padding: var(--dock-padding, var(--spacing-2) var(--spacing-4));
+    backdrop-filter: var(--dock-backdrop-filter, blur(20px));
+    transition: var(--animation-transition-all);
+    pointer-events: auto;
+}
+
+.dock:hover {
+    box-shadow: var(--dock-hover-shadow, var(--shadow-xl));
+    transform: translateX(-50%) translateY(-2px);
+}
+
+.dock-icon {
+    width: var(--dock-icon-size, 48px);
+    height: var(--dock-icon-size, 48px);
+    border-radius: var(--dock-icon-border-radius, var(--border-radius-lg));
+    background: var(--dock-icon-background, var(--color-surface-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--animation-transition-all);
+    cursor: pointer;
+    position: relative;
+    border: var(--dock-icon-border, 1px solid transparent);
+    pointer-events: auto;
+}
+
+.dock-icon:hover {
+    background: var(--dock-icon-hover-background, var(--color-surface-hover));
+    border-color: var(--dock-icon-hover-border-color, var(--color-border-focus));
+    transform: scale(1.1) translateY(-4px);
+    box-shadow: var(--dock-icon-hover-shadow, var(--shadow-md));
+}
+
+.dock-icon:active {
+    background: var(--dock-icon-active-background, var(--color-surface-active));
+    transform: scale(1.05) translateY(-2px);
+}
+
+.dock-icon:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.dock-icon-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--dock-icon-content-gap, var(--spacing-1));
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+.dock-icon-image {
+    width: var(--dock-icon-image-size, 24px);
+    height: var(--dock-icon-image-size, 24px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--animation-transition-all);
+}
+
+.dock-icon-symbol {
+    font-size: var(--dock-icon-symbol-size, 1.5rem);
+    line-height: 1;
+    filter: var(--dock-icon-filter, none);
+    transition: var(--animation-transition-all);
+}
+
+.dock-icon:hover .dock-icon-symbol {
+    filter: var(--dock-icon-hover-filter, brightness(1.1));
+}
+
+.dock-icon-label {
+    font-size: var(--dock-icon-label-font-size, var(--typography-font-size-xs));
+    color: var(--dock-icon-label-color, var(--color-text-secondary));
+    font-weight: var(--dock-icon-label-font-weight, var(--typography-font-weight-medium));
+    text-align: center;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: var(--animation-transition-all);
+    white-space: nowrap;
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    pointer-events: none;
+}
+
+.dock-icon:hover .dock-icon-label {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Dock indicator for active apps */
+.dock-icon.active {
+    background: var(--dock-icon-active-background, var(--color-primary));
+    border-color: var(--dock-icon-active-border-color, var(--color-primary));
+}
+
+.dock-icon.active .dock-icon-symbol {
+    filter: var(--dock-icon-active-filter, brightness(0) invert(1));
+}
+
+/* Dock indicator dot */
+.dock-icon.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--dock-indicator-size, 4px);
+    height: var(--dock-indicator-size, 4px);
+    background: var(--dock-indicator-color, var(--color-primary));
+    border-radius: 50%;
+    box-shadow: var(--dock-indicator-shadow, var(--shadow-sm));
+}
+
+/* Responsive adjustments */
+@@media (max-width: var(--layout-breakpoint-md)) {
+    .dock {
+        bottom: var(--spacing-4);
+    }
+    
+    .dock-container {
+        padding: var(--spacing-2) var(--spacing-3);
+        gap: var(--spacing-2);
+    }
+    
+    .dock-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .dock-icon-image {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .dock-icon-symbol {
+        font-size: 1.25rem;
+    }
+    
+    .dock-icon:hover {
+        transform: scale(1.05) translateY(-2px);
+    }
+}
+
+@@media (max-width: var(--layout-breakpoint-sm)) {
+    .dock {
+        bottom: var(--spacing-3);
+    }
+    
+    .dock-container {
+        padding: var(--spacing-1) var(--spacing-2);
+        gap: var(--spacing-1);
+        border-radius: var(--border-radius-lg);
+    }
+    
+    .dock-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--border-radius-md);
+    }
+    
+    .dock-icon-image {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .dock-icon-symbol {
+        font-size: 1rem;
+    }
+    
+    .dock-icon-label {
+        font-size: var(--typography-font-size-xs);
+        bottom: -18px;
+    }
+    
+    .dock-icon:hover {
+        transform: scale(1.02) translateY(-1px);
+    }
+}
+
+/* Dark mode adjustments for icons */
+@@media (prefers-color-scheme: dark) {
+    .dock-icon-symbol {
+        filter: var(--dock-icon-dark-filter, invert(1) brightness(0.9));
+    }
+    
+    .dock-icon:hover .dock-icon-symbol {
+        filter: var(--dock-icon-dark-hover-filter, invert(1) brightness(1.1));
+    }
+}
+
+/* Animation for dock icons */
+.dock-icon {
+    animation: dockIconFadeIn 0.3s ease-out;
+}
+
+.dock-icon:nth-child(1) { animation-delay: 0.1s; }
+.dock-icon:nth-child(2) { animation-delay: 0.2s; }
+.dock-icon:nth-child(3) { animation-delay: 0.3s; }
+.dock-icon:nth-child(4) { animation-delay: 0.4s; }
+
+@@keyframes dockIconFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Focus styles for accessibility */
+.dock-icon:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+/* Dock bounce animation for app launch */
+.dock-icon.launching {
+    animation: dockBounce 0.6s ease-out;
+}
+
+@@keyframes dockBounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+</style>
 
 @code {
     [Parameter] public EventCallback<(string, Type)> OnOpenApp { get; set; }
-    void OpenApp(string title, Type type) => OnOpenApp.InvokeAsync((title, type));
+    
+    private async Task OpenApp(string title, Type type)
+    {
+        // Add bounce animation
+        await AddLaunchAnimation();
+        await OnOpenApp.InvokeAsync((title, type));
+    }
+    
+    private async Task AddLaunchAnimation()
+    {
+        // This would be implemented with JS interop for actual animation
+        // For now, just a placeholder
+        await Task.Delay(100);
+    }
 } 

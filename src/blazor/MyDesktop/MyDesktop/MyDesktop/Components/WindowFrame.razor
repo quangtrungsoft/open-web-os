@@ -4,16 +4,368 @@
 
 <div class="window-frame @(IsActive ? "active" : "")" style="left:@Position.x px; top:@Position.y px; width:@Size.w px; height:@Size.h px; z-index:@ZIndex; position:absolute;" @onmousedown="HandleFocus">
     <div class="window-titlebar" @onmousedown="StartDrag">
-        <span class="window-dot red"></span>
-        <span class="window-dot yellow"></span>
-        <span class="window-dot green"></span>
-        <span class="window-title">@Title</span>
-        <button class="window-close" @onclick="OnClose">×</button>
+        <div class="window-controls">
+            <button class="window-control-btn window-close-btn" @onclick="OnClose" @onclick:preventDefault="true" title="Close">
+                <span class="window-control-icon">&#215;</span>
+            </button>
+            <button class="window-control-btn window-minimize-btn" @onclick="MinimizeWindow" @onclick:preventDefault="true" title="Minimize">
+                <span class="window-control-icon">&#8722;</span>
+            </button>
+            <button class="window-control-btn window-maximize-btn" @onclick="MaximizeWindow" @onclick:preventDefault="true" title="Maximize">
+                <span class="window-control-icon">&#9633;</span>
+            </button>
+        </div>
+        <div class="window-title-content">
+            <span class="window-title-icon">&#128196;</span>
+            <span class="window-title">@Title</span>
+        </div>
+        <div class="window-actions">
+            <button class="window-action-btn" @onclick="ShowWindowMenu" title="Window Menu">
+                <span class="window-action-icon">&#8942;</span>
+            </button>
+        </div>
     </div>
     <div class="window-content">
         @ChildContent
     </div>
+    <div class="window-resize-handle window-resize-n" @onmousedown='() => StartResize("n")'></div>
+    <div class="window-resize-handle window-resize-s" @onmousedown='() => StartResize("s")'></div>
+    <div class="window-resize-handle window-resize-e" @onmousedown='() => StartResize("e")'></div>
+    <div class="window-resize-handle window-resize-w" @onmousedown='() => StartResize("w")'></div>
+    <div class="window-resize-handle window-resize-ne" @onmousedown='() => StartResize("ne")'></div>
+    <div class="window-resize-handle window-resize-nw" @onmousedown='() => StartResize("nw")'></div>
+    <div class="window-resize-handle window-resize-se" @onmousedown='() => StartResize("se")'></div>
+    <div class="window-resize-handle window-resize-sw" @onmousedown='() => StartResize("sw")'></div>
 </div>
+
+<style>
+.window-frame {
+    background: var(--window-frame-background, var(--color-surface-primary));
+    color: var(--window-frame-text-color, var(--color-text-primary));
+    border: var(--window-frame-border, 1px solid var(--color-border-primary));
+    border-radius: var(--window-frame-border-radius, var(--border-radius-lg));
+    box-shadow: var(--window-frame-shadow, var(--shadow-lg));
+    overflow: hidden;
+    position: absolute;
+    transition: var(--animation-transition-all);
+    min-width: var(--window-frame-min-width, 300px);
+    min-height: var(--window-frame-min-height, 200px);
+    max-width: var(--window-frame-max-width, 90vw);
+    max-height: var(--window-frame-max-height, 90vh);
+    backdrop-filter: var(--window-frame-backdrop-filter, blur(10px));
+    display: flex;
+    flex-direction: column;
+}
+
+.window-frame.active {
+    border-color: var(--window-frame-active-border-color, var(--color-border-focus));
+    box-shadow: var(--window-frame-active-shadow, var(--shadow-xl));
+    z-index: var(--layout-z-index-window);
+}
+
+.window-titlebar {
+    display: flex;
+    align-items: center;
+    height: var(--window-titlebar-height, 2.5rem);
+    background: var(--window-titlebar-background, var(--color-surface-secondary));
+    padding: var(--window-titlebar-padding, 0 var(--spacing-4));
+    border-bottom: var(--window-titlebar-border-bottom, 1px solid var(--color-border-primary));
+    user-select: none;
+    cursor: move;
+    font-family: var(--typography-font-family-primary);
+    font-size: var(--window-titlebar-font-size, var(--typography-font-size-sm));
+    font-weight: var(--window-titlebar-font-weight, var(--typography-font-weight-medium));
+    gap: var(--spacing-3);
+    position: relative;
+}
+
+.window-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    flex-shrink: 0;
+}
+
+.window-control-btn {
+    background: none;
+    border: none;
+    color: var(--window-control-btn-color, var(--color-text-secondary));
+    font-family: var(--typography-font-family-mono);
+    font-size: var(--window-control-btn-font-size, var(--typography-font-size-sm));
+    font-weight: var(--typography-font-weight-bold);
+    cursor: pointer;
+    padding: var(--spacing-1);
+    border-radius: var(--window-control-btn-border-radius, var(--border-radius-sm));
+    transition: var(--animation-transition-all);
+    width: var(--window-control-btn-size, 1.5rem);
+    height: var(--window-control-btn-size, 1.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.window-control-btn:hover {
+    background: var(--window-control-btn-hover-background, var(--color-surface-hover));
+    color: var(--window-control-btn-hover-color, var(--color-text-primary));
+}
+
+.window-control-btn:active {
+    background: var(--window-control-btn-active-background, var(--color-surface-active));
+}
+
+.window-control-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.window-close-btn:hover {
+    background: var(--window-close-btn-hover-background, var(--color-error));
+    color: var(--window-close-btn-hover-color, var(--color-text-inverse));
+}
+
+.window-minimize-btn:hover {
+    background: var(--window-minimize-btn-hover-background, var(--color-warning));
+    color: var(--window-minimize-btn-hover-color, var(--color-text-inverse));
+}
+
+.window-maximize-btn:hover {
+    background: var(--window-maximize-btn-hover-background, var(--color-success));
+    color: var(--window-maximize-btn-hover-color, var(--color-text-inverse));
+}
+
+.window-title-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    min-width: 0;
+    overflow: hidden;
+}
+
+.window-title-icon {
+    font-size: var(--window-title-icon-size, var(--typography-font-size-sm));
+    flex-shrink: 0;
+}
+
+.window-title {
+    font-weight: var(--typography-font-weight-medium);
+    color: var(--window-title-color, var(--color-text-primary));
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+
+.window-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    flex-shrink: 0;
+}
+
+.window-action-btn {
+    background: none;
+    border: none;
+    color: var(--window-action-btn-color, var(--color-text-secondary));
+    font-family: var(--typography-font-family-mono);
+    font-size: var(--window-action-btn-font-size, var(--typography-font-size-sm));
+    cursor: pointer;
+    padding: var(--spacing-1);
+    border-radius: var(--window-action-btn-border-radius, var(--border-radius-sm));
+    transition: var(--animation-transition-all);
+    width: var(--window-action-btn-size, 1.5rem);
+    height: var(--window-action-btn-size, 1.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.window-action-btn:hover {
+    background: var(--window-action-btn-hover-background, var(--color-surface-hover));
+    color: var(--window-action-btn-hover-color, var(--color-text-primary));
+}
+
+.window-action-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-focus-ring);
+}
+
+.window-content {
+    flex: 1;
+    padding: var(--window-content-padding, var(--spacing-4));
+    overflow: auto;
+    background: var(--window-content-background, var(--color-surface-primary));
+    position: relative;
+}
+
+/* Scrollbar styling */
+.window-content::-webkit-scrollbar {
+    width: var(--window-scrollbar-width, 8px);
+    height: var(--window-scrollbar-height, 8px);
+}
+
+.window-content::-webkit-scrollbar-track {
+    background: var(--window-scrollbar-track-background, var(--color-surface-secondary));
+    border-radius: var(--window-scrollbar-border-radius, 4px);
+}
+
+.window-content::-webkit-scrollbar-thumb {
+    background: var(--window-scrollbar-thumb-background, var(--color-border-secondary));
+    border-radius: var(--window-scrollbar-thumb-border-radius, 4px);
+    min-height: var(--window-scrollbar-thumb-min-height, 40px);
+    min-width: var(--window-scrollbar-thumb-min-width, 40px);
+}
+
+.window-content::-webkit-scrollbar-thumb:hover {
+    background: var(--window-scrollbar-thumb-hover, var(--color-border-primary));
+}
+
+.window-content::-webkit-scrollbar-thumb:active {
+    background: var(--window-scrollbar-thumb-active, var(--color-text-tertiary));
+}
+
+/* Resize handles */
+.window-resize-handle {
+    position: absolute;
+    background: transparent;
+    transition: var(--animation-transition-all);
+}
+
+.window-resize-handle:hover {
+    background: var(--window-resize-handle-hover-background, rgba(0, 0, 0, 0.1));
+}
+
+.window-resize-n {
+    top: 0;
+    left: 8px;
+    right: 8px;
+    height: 4px;
+    cursor: n-resize;
+}
+
+.window-resize-s {
+    bottom: 0;
+    left: 8px;
+    right: 8px;
+    height: 4px;
+    cursor: s-resize;
+}
+
+.window-resize-e {
+    top: 8px;
+    right: 0;
+    bottom: 8px;
+    width: 4px;
+    cursor: e-resize;
+}
+
+.window-resize-w {
+    top: 8px;
+    left: 0;
+    bottom: 8px;
+    width: 4px;
+    cursor: w-resize;
+}
+
+.window-resize-ne {
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    cursor: ne-resize;
+}
+
+.window-resize-nw {
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    cursor: nw-resize;
+}
+
+.window-resize-se {
+    bottom: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    cursor: se-resize;
+}
+
+.window-resize-sw {
+    bottom: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    cursor: sw-resize;
+}
+
+/* Window states */
+.window-frame.minimized {
+    transform: scale(0.1);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.window-frame.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    border-radius: 0;
+}
+
+/* Responsive adjustments */
+@@media (max-width: var(--layout-breakpoint-sm)) {
+    .window-frame {
+        min-width: 280px;
+        min-height: 180px;
+    }
+    
+    .window-titlebar {
+        height: 2rem;
+        padding: 0 var(--spacing-3);
+        font-size: var(--typography-font-size-xs);
+    }
+    
+    .window-content {
+        padding: var(--spacing-3);
+    }
+    
+    .window-control-btn {
+        width: 1.25rem;
+        height: 1.25rem;
+        font-size: var(--typography-font-size-xs);
+    }
+    
+    .window-action-btn {
+        width: 1.25rem;
+        height: 1.25rem;
+        font-size: var(--typography-font-size-xs);
+    }
+}
+
+/* Animation for window appearance */
+.window-frame {
+    animation: windowFadeIn 0.2s ease-out;
+}
+
+@@keyframes windowFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Focus styles for accessibility */
+.window-frame:focus-within {
+    border-color: var(--color-border-focus);
+    box-shadow: var(--shadow-lg), 0 0 0 2px var(--color-focus-ring);
+}
+</style>
 
 @code {
     [Parameter] public string Title { get; set; } = string.Empty;
@@ -26,7 +378,11 @@
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
     private bool dragging = false;
+    private bool resizing = false;
+    private string resizeDirection = "";
     private int dragOffsetX, dragOffsetY;
+    private (int x, int y) originalPosition;
+    private (int w, int h) originalSize;
 
     void HandleFocus()
     {
@@ -36,12 +392,78 @@
 
     void StartDrag(MouseEventArgs e)
     {
+        if (resizing) return;
+        
         dragging = true;
         dragOffsetX = (int)e.ClientX - Position.x;
         dragOffsetY = (int)e.ClientY - Position.y;
-        // Đăng ký sự kiện mousemove, mouseup toàn cục
-        JS.InvokeVoidAsync("window.addEventListener", "mousemove", DotNetObjectReference.Create(this));
-        JS.InvokeVoidAsync("window.addEventListener", "mouseup", DotNetObjectReference.Create(this));
+        originalPosition = Position;
+        
+        // Register global mouse events
+        JS.InvokeVoidAsync("addEventListener", "mousemove", DotNetObjectReference.Create(this));
+        JS.InvokeVoidAsync("addEventListener", "mouseup", DotNetObjectReference.Create(this));
     }
-    // Để đơn giản, logic drag thực tế sẽ bổ sung sau hoặc dùng JSInterop
+
+    void StartResize(string direction)
+    {
+        if (dragging) return;
+        
+        resizing = true;
+        resizeDirection = direction;
+        originalPosition = Position;
+        originalSize = Size;
+        
+        // Register global mouse events
+        JS.InvokeVoidAsync("addEventListener", "mousemove", DotNetObjectReference.Create(this));
+        JS.InvokeVoidAsync("addEventListener", "mouseup", DotNetObjectReference.Create(this));
+    }
+
+    void MinimizeWindow()
+    {
+        // Implementation for minimize
+        Console.WriteLine("Minimize window");
+    }
+
+    void MaximizeWindow()
+    {
+        // Implementation for maximize
+        Console.WriteLine("Maximize window");
+    }
+
+    void ShowWindowMenu()
+    {
+        // Implementation for window menu
+        Console.WriteLine("Show window menu");
+    }
+
+    [JSInvokable]
+    public void OnMouseMove(int clientX, int clientY)
+    {
+        if (dragging)
+        {
+            // Handle dragging logic
+            var newX = clientX - dragOffsetX;
+            var newY = clientY - dragOffsetY;
+            
+            // Update position (this would need to be implemented with proper state management)
+            Console.WriteLine($"Dragging to: {newX}, {newY}");
+        }
+        else if (resizing)
+        {
+            // Handle resizing logic
+            Console.WriteLine($"Resizing {resizeDirection} to: {clientX}, {clientY}");
+        }
+    }
+
+    [JSInvokable]
+    public void OnMouseUp()
+    {
+        dragging = false;
+        resizing = false;
+        resizeDirection = "";
+        
+        // Remove global event listeners
+        JS.InvokeVoidAsync("removeEventListener", "mousemove", DotNetObjectReference.Create(this));
+        JS.InvokeVoidAsync("removeEventListener", "mouseup", DotNetObjectReference.Create(this));
+    }
 } 

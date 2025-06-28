@@ -21,7 +21,7 @@ namespace MyDesktop.Services
                 return result;
             _currentTheme = manifest;
             OnThemeChanged?.Invoke(manifest.ThemeId);
-            return ValidationResult.Success;
+            return result;
         }
 
         public ThemeManifest? GetCurrentTheme() => _currentTheme;
