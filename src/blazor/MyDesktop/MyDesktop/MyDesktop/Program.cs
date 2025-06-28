@@ -1,18 +1,10 @@
 using MyDesktop.Components;
-using MyDesktop.Services;
-using Microsoft.AspNetCore.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
-builder.Services.AddSingleton<ISimulationEngine, SimulationEngine>();
-builder.Services.AddSingleton<IWindowManager, WindowManagerService>();
-builder.Services.AddSingleton<RuleEngineService>();
-builder.Services.AddSingleton<OrchestratorService>();
-builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
@@ -35,7 +27,6 @@ app.UseAntiforgery();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(MyDesktop.Client._Imports).Assembly);
 
