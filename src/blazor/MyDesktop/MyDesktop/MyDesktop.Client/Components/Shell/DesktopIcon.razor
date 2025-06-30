@@ -1,0 +1,11 @@
+@using MyDesktop.Client.Models;
+
+<div class="desktop-icon" @onclick="() => OnClick.InvokeAsync()">
+    <img src="@Icon.IconPath" alt="@Icon.Name" class="icon-image" />
+    <span class="icon-label">@Icon.Name</span>
+</div>
+
+@code {
+    [Parameter] public DesktopIconInfo Icon { get; set; } = new();
+    [Parameter] public EventCallback OnClick { get; set; }
+} 

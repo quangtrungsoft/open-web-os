@@ -1,0 +1,93 @@
+@using MyDesktop.Client.Services.SystemServices
+@using MyDesktop.Client.Models
+@inject IEventBusService EventBus
+@inject IWindowManagerService WindowManager
+
+<div class="desktop @ThemeClass" @onclick="HandleDesktopClick">
+    <div class="wallpaper" style="background-image: url(@WallpaperUrl)"></div>
+    
+    <div class="desktop-icons">
+        @foreach (var icon in DesktopIcons)
+        {
+            <DesktopIcon Icon="@icon" OnClick="() => LaunchApp(icon.AppId)" />
+        }
+    </div>
+    
+    <VirtualDesktopManager CurrentSpace="@CurrentSpace" OnSpaceChanged="@((space) => CurrentSpace = space)" />
+    
+    @foreach (var window in OpenWindows)
+    {
+        <AppWindow Window="@window" />
+    }
+</div>
+
+@code {
+    private string ThemeClass => "theme-light"; // TODO: Get from ThemeEngine
+    private string WallpaperUrl => "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB2aWV3Qm94PSIwIDAgMTkyMCAxMDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzAwN0FGRjtzdG9wLW9wYWNpdHk6MSIgLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMzNEM3NTk7c3RvcC1vcGFjaXR5OjEiIC8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PC9zdmc+";
+    private int CurrentSpace = 0;
+    private List<WindowInfo> OpenWindows = new();
+    
+    private List<DesktopIconInfo> DesktopIcons = new()
+    {
+        new DesktopIconInfo { AppId = "finder", Name = "Finder", IconPath = "/icons/finder.svg" },
+        new DesktopIconInfo { AppId = "terminal", Name = "Terminal", IconPath = "/icons/terminal.svg" },
+        new DesktopIconInfo { AppId = "settings", Name = "Settings", IconPath = "/icons/settings.svg" }
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        EventBus.Subscribe<DesktopClickedEvent>(HandleDesktopClicked);
+        EventBus.Subscribe<WindowCreatedEvent>(HandleWindowCreated);
+        EventBus.Subscribe<WindowClosedEvent>(HandleWindowClosed);
+        
+        // Load existing windows
+        var windows = await WindowManager.GetOpenWindowsAsync();
+        OpenWindows.AddRange(windows);
+    }
+
+    private async Task HandleDesktopClick()
+    {
+        await EventBus.PublishAsync(new DesktopClickedEvent { X = 0, Y = 0 });
+    }
+
+    private async Task HandleDesktopClicked(DesktopClickedEvent evt)
+    {
+        // Handle desktop click event
+        await Task.CompletedTask;
+    }
+
+    private async Task HandleWindowCreated(WindowCreatedEvent evt)
+    {
+        OpenWindows.Add(evt.Window);
+        StateHasChanged();
+    }
+
+    private async Task HandleWindowClosed(WindowClosedEvent evt)
+    {
+        var window = OpenWindows.FirstOrDefault(w => w.Id == evt.WindowId);
+        if (window != null)
+        {
+            OpenWindows.Remove(window);
+            StateHasChanged();
+        }
+    }
+
+    private async Task LaunchApp(string appId)
+    {
+        var windowOptions = new WindowOptions
+        {
+            Title = appId,
+            Width = 800,
+            Height = 600
+        };
+
+        await WindowManager.CreateWindowAsync(appId, windowOptions);
+    }
+}
+
+public class DesktopIconInfo
+{
+    public string AppId { get; set; }
+    public string Name { get; set; }
+    public string IconPath { get; set; }
+} 

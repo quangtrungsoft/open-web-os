@@ -1,0 +1,22 @@
+@using MyDesktop.Client.Services.SystemServices
+@using MyDesktop.Client.Models
+@inject IWindowManagerService WindowManager
+
+@if (Window != null)
+{
+    <WindowFrame Window="@Window">
+        <div class="app-content">
+            <h2>@Window.Title</h2>
+            <p>Welcome to @Window.Title application!</p>
+            <div class="app-buttons">
+                <button @onclick="() => WindowManager.CloseWindowAsync(Window.Id)">Close</button>
+                <button @onclick="() => WindowManager.MinimizeWindowAsync(Window.Id)">Minimize</button>
+                <button @onclick="() => WindowManager.MaximizeWindowAsync(Window.Id)">Maximize</button>
+            </div>
+        </div>
+    </WindowFrame>
+}
+
+@code {
+    [Parameter] public WindowInfo? Window { get; set; }
+} 

@@ -36,3 +36,501 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+/* Design System - macOS-like */
+:root {
+    /* Colors */
+    --macos-blue: #007AFF;
+    --macos-green: #34C759;
+    --macos-orange: #FF9500;
+    --macos-red: #FF3B30;
+    --macos-gray: #8E8E93;
+    
+    /* Typography */
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-size-small: 11px;
+    --font-size-regular: 13px;
+    --font-size-large: 15px;
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    
+    /* Border Radius */
+    --border-radius-sm: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    
+    /* Light theme */
+    --background-primary: #FFFFFF;
+    --background-secondary: #F5F5F7;
+    --text-primary: #1D1D1F;
+    --text-secondary: #86868B;
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* Dark mode support */
+[data-theme="dark"] {
+    --background-primary: #1C1C1E;
+    --background-secondary: #2C2C2E;
+    --text-primary: #FFFFFF;
+    --text-secondary: #EBEBF5;
+}
+
+/* Theme transition animation */
+.theme-transitioning * {
+    transition: background-color var(--transition-normal), 
+                color var(--transition-normal), 
+                border-color var(--transition-normal);
+}
+
+/* Global styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    background: var(--background-primary);
+    color: var(--text-primary);
+    overflow: hidden;
+}
+
+/* MyDesktop Shell */
+.mydesktop-shell {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Desktop */
+.desktop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--background-primary);
+    overflow: hidden;
+}
+
+.wallpaper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: opacity var(--transition-normal);
+}
+
+.desktop-icons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: var(--spacing-lg);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 80px);
+    gap: var(--spacing-md);
+    align-content: start;
+}
+
+.desktop-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    user-select: none;
+}
+
+.desktop-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+.desktop-icon:active {
+    transform: scale(0.95);
+}
+
+.icon-image {
+    width: 48px;
+    height: 48px;
+    margin-bottom: var(--spacing-xs);
+    transition: transform var(--transition-fast);
+}
+
+.icon-label {
+    font-size: var(--font-size-small);
+    color: var(--text-primary);
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    transition: color var(--transition-fast);
+}
+
+/* Menu Bar */
+.menu-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-md);
+    font-size: var(--font-size-small);
+    z-index: 1000;
+    transition: background-color var(--transition-normal);
+}
+
+[data-theme="dark"] .menu-bar {
+    background: rgba(28, 28, 30, 0.8);
+}
+
+.apple-menu {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.apple-logo {
+    font-size: 14px;
+    transition: transform var(--transition-fast);
+}
+
+.apple-logo:hover {
+    transform: scale(1.1);
+}
+
+.menu-item {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.menu-item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.status-items {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.status-item {
+    padding: var(--spacing-xs);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.status-item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .status-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dock */
+.dock {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-sm);
+    display: flex;
+    gap: var(--spacing-xs);
+    transition: all var(--transition-normal);
+    z-index: 1000;
+}
+
+[data-theme="dark"] .dock {
+    background: rgba(28, 28, 30, 0.8);
+}
+
+.dock.magnified .dock-item {
+    transform: scale(1.2);
+}
+
+.dock-item {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    user-select: none;
+}
+
+.dock-item:hover {
+    transform: scale(1.1);
+}
+
+.dock-item:active {
+    transform: scale(0.95);
+}
+
+.dock-item.running .running-indicator {
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--macos-blue);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.dock-item.bouncing {
+    animation: bounce 0.6s ease-in-out;
+}
+
+.dock-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform var(--transition-fast);
+}
+
+/* Window Frame */
+.window-frame {
+    position: absolute;
+    background: var(--background-primary);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    z-index: 100;
+    transition: all var(--transition-normal);
+    min-width: 300px;
+    min-height: 200px;
+}
+
+.window-titlebar {
+    height: 32px;
+    background: var(--background-secondary);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-sm);
+    user-select: none;
+    transition: background-color var(--transition-fast);
+}
+
+.traffic-lights {
+    display: flex;
+    gap: var(--spacing-xs);
+    margin-right: var(--spacing-sm);
+}
+
+.traffic-light {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.traffic-light:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+}
+
+.traffic-light.close {
+    background: var(--macos-red);
+}
+
+.traffic-light.minimize {
+    background: var(--macos-orange);
+}
+
+.traffic-light.maximize {
+    background: var(--macos-green);
+}
+
+.window-title {
+    font-size: var(--font-size-small);
+    color: var(--text-primary);
+    flex: 1;
+    text-align: center;
+    transition: color var(--transition-fast);
+}
+
+.window-content {
+    padding: var(--spacing-md);
+    height: calc(100% - 32px);
+    overflow: auto;
+    transition: background-color var(--transition-fast);
+}
+
+/* App Content */
+.app-content {
+    padding: var(--spacing-lg);
+    text-align: center;
+}
+
+.app-content h2 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+    transition: color var(--transition-fast);
+}
+
+.app-content p {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-lg);
+    transition: color var(--transition-fast);
+}
+
+.app-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+}
+
+.app-buttons button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    background: var(--macos-blue);
+    color: white;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: var(--font-family);
+}
+
+.app-buttons button:hover {
+    background: var(--macos-blue);
+    opacity: 0.8;
+    transform: translateY(-1px);
+}
+
+.app-buttons button:active {
+    transform: translateY(0);
+}
+
+/* Virtual Desktop Manager */
+.virtual-desktop-manager {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+}
+
+.spaces-container {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.space {
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.space.active {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.space:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+.space-number {
+    font-size: 10px;
+    color: var(--text-primary);
+    font-weight: bold;
+    transition: color var(--transition-fast);
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Apply animations */
+.window-frame {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.dock-item {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .desktop-icons {
+        grid-template-columns: repeat(auto-fill, 60px);
+        gap: var(--spacing-sm);
+        padding: var(--spacing-md);
+    }
+    
+    .dock {
+        bottom: 10px;
+        padding: var(--spacing-xs);
+    }
+    
+    .dock-item {
+        width: 40px;
+        height: 40px;
+    }
+}

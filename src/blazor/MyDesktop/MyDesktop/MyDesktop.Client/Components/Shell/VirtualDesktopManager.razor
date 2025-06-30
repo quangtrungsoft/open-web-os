@@ -1,0 +1,41 @@
+@using MyDesktop.Client.Services.SystemServices
+@using MyDesktop.Client.Models
+
+<div class="virtual-desktop-manager">
+    <div class="spaces-container">
+        @for (int i = 0; i < Spaces.Count; i++)
+        {
+            var spaceIndex = i;
+            <div class="space @(spaceIndex == CurrentSpace ? "active" : "")" 
+                 @onclick="() => SwitchToSpace(spaceIndex)">
+                <span class="space-number">@(spaceIndex + 1)</span>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public int CurrentSpace { get; set; }
+    [Parameter] public EventCallback<int> OnSpaceChanged { get; set; }
+    
+    private List<VirtualSpace> Spaces = new()
+    {
+        new VirtualSpace { Id = 0, Name = "Desktop 1" },
+        new VirtualSpace { Id = 1, Name = "Desktop 2" },
+        new VirtualSpace { Id = 2, Name = "Desktop 3" }
+    };
+
+    private async Task SwitchToSpace(int spaceIndex)
+    {
+        if (spaceIndex != CurrentSpace)
+        {
+            await OnSpaceChanged.InvokeAsync(spaceIndex);
+        }
+    }
+}
+
+public class VirtualSpace
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+} 

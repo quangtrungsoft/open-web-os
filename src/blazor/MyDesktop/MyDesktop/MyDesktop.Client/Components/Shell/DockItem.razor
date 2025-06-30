@@ -1,0 +1,18 @@
+@using MyDesktop.Client.Models
+
+<div class="dock-item @(App.IsRunning ? "running" : "")" 
+     @onclick="() => OnClick.InvokeAsync()" 
+     @oncontextmenu="() => OnContextMenu.InvokeAsync()"
+     data-app-id="@App.Id">
+    <img src="@App.IconPath" alt="@App.Name" class="dock-icon" />
+    @if (App.IsRunning)
+    {
+        <div class="running-indicator"></div>
+    }
+</div>
+
+@code {
+    [Parameter] public DockAppInfo App { get; set; } = new();
+    [Parameter] public EventCallback OnClick { get; set; }
+    [Parameter] public EventCallback OnContextMenu { get; set; }
+} 

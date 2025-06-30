@@ -1,0 +1,85 @@
+@using MyDesktop.Client.Services.SystemServices
+@using MyDesktop.Client.Models
+@inject IEventBusService EventBus
+@inject IJSRuntime JSRuntime
+@inject ThemeManagerService ThemeManagerService
+
+<div class="menu-bar">
+    <div class="apple-menu">
+        <span class="apple-logo">🍎</span>
+        <span class="menu-item">Apple</span>
+    </div>
+
+    <div class="app-menu">
+        <span class="menu-item">File</span>
+        <span class="menu-item">Edit</span>
+        <span class="menu-item">View</span>
+        <span class="menu-item">Window</span>
+        <span class="menu-item">Help</span>
+    </div>
+
+    <div class="status-items">
+        <div class="status-item" @onclick="ToggleControlCenter">
+            <span class="status-icon">📶</span>
+        </div>
+        <div class="status-item" @onclick="ToggleNotificationCenter">
+            <span class="status-icon">🔔</span>
+        </div>
+        <div class="status-item" @onclick="ToggleTheme">
+            <span class="status-icon">🌙</span>
+        </div>
+        <div class="status-item">
+            <span class="time">@CurrentTime</span>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private string CurrentTime = DateTime.Now.ToString("HH:mm");
+    private Timer? _timer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        EventBus.Subscribe<ThemeChangedEvent>(HandleThemeChanged);
+
+        // Start timer for clock
+        _timer = new Timer(async _ => await UpdateTime(), null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+    }
+
+    private async Task UpdateTime()
+    {
+        await InvokeAsync(() =>
+        {
+            CurrentTime = DateTime.Now.ToString("HH:mm");
+            StateHasChanged();
+        });
+    }
+
+    private async Task ToggleControlCenter()
+    {
+        await EventBus.PublishAsync(new ControlCenterToggledEvent());
+    }
+
+    private async Task ToggleNotificationCenter()
+    {
+        await EventBus.PublishAsync(new NotificationCenterToggledEvent());
+    }
+
+    private async Task ToggleTheme()
+    {
+        var theme = ThemeManagerService.GetTheme("Night");
+        await ThemeManagerService.ApplyThemeAsync(theme?.Code);
+    }
+
+    private async Task HandleThemeChanged(ThemeChangedEvent evt)
+    {
+        // Theme change handled by JavaScript
+        await Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
+} 

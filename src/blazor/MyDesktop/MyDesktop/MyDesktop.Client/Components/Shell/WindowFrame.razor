@@ -1,0 +1,53 @@
+@using MyDesktop.Client.Services.SystemServices
+@using MyDesktop.Client.Models
+@inject IWindowManagerService WindowManager
+
+<div class="window-frame @WindowStateClass" 
+     style="left: @(Window.X)px; top: @(Window.Y)px; width: @(Window.Width)px; height: @(Window.Height)px;">
+    
+    <div class="window-titlebar" @onfocus="HandleFocus">
+        <div class="traffic-lights">
+            <div class="traffic-light close" @onclick="CloseWindow"></div>
+            <div class="traffic-light minimize" @onclick="MinimizeWindow"></div>
+            <div class="traffic-light maximize" @onclick="MaximizeWindow"></div>
+        </div>
+        <div class="window-title">@Window.Title</div>
+    </div>
+    
+    <div class="window-content">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter] public WindowInfo Window { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    private string WindowStateClass => Window.State switch
+    {
+        WindowState.Minimized => "minimized",
+        WindowState.Maximized => "maximized",
+        WindowState.FullScreen => "fullscreen",
+        _ => "normal"
+    };
+
+    private async Task CloseWindow()
+    {
+        await WindowManager.CloseWindowAsync(Window.Id);
+    }
+
+    private async Task MinimizeWindow()
+    {
+        await WindowManager.MinimizeWindowAsync(Window.Id);
+    }
+
+    private async Task MaximizeWindow()
+    {
+        await WindowManager.MaximizeWindowAsync(Window.Id);
+    }
+
+    private void HandleFocus(FocusEventArgs e)
+    {
+
+    }
+} 

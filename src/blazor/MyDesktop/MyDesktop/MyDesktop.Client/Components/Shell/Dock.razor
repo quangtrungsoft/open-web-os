@@ -1,0 +1,49 @@
+@inject IWindowManagerService WindowManager
+
+<div class="dock @DockPosition @(IsMagnified ? "magnified" : "")">
+    @foreach (var app in DockApps)
+    {
+        <DockItem 
+            App="@app" 
+            OnClick="() => LaunchApp(app.Id)"
+            OnContextMenu="() => ShowContextMenu(app)" />
+    }
+</div>
+
+@code {
+    private string DockPosition => "bottom";
+    private bool IsMagnified = false;
+    
+    private List<DockAppInfo> DockApps = new()
+    {
+        new DockAppInfo { Id = "finder", Name = "Finder", IconPath = "/icons/finder.svg", IsRunning = false },
+        new DockAppInfo { Id = "terminal", Name = "Terminal", IconPath = "/icons/terminal.svg", IsRunning = false },
+        new DockAppInfo { Id = "settings", Name = "Settings", IconPath = "/icons/settings.svg", IsRunning = false },
+        new DockAppInfo { Id = "calculator", Name = "Calculator", IconPath = "/icons/calculator.svg", IsRunning = false }
+    };
+
+    private async Task LaunchApp(string appId)
+    {
+        var windowOptions = new WindowOptions
+        {
+            Title = appId,
+            Width = 800,
+            Height = 600
+        };
+
+        await WindowManager.CreateWindowAsync(appId, windowOptions);
+        
+        // Update app running state
+        var app = DockApps.FirstOrDefault(a => a.Id == appId);
+        if (app != null)
+        {
+            app.IsRunning = true;
+        }
+    }
+
+    private async Task ShowContextMenu(DockAppInfo app)
+    {
+        // TODO: Show context menu
+        await Task.CompletedTask;
+    }
+} 

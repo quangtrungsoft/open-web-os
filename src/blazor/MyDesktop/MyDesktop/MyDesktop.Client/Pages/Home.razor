@@ -1,7 +1,21 @@
 ﻿@page "/"
+@inject ThemeManagerService ThemeManagerService
+@inject MacOSTheme MacosTheme
+@inject NightTheme NightTheme
 
-<PageTitle>Home</PageTitle>
+<PageTitle>MyDesktop - macOS-like Web Desktop</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="mydesktop-shell">
+    <MenuBar />
+    <Desktop />
+    <Dock />
+</div>
 
-Welcome to your new app.
+@code
+{
+    protected override void OnInitialized()
+    {
+        ThemeManagerService.RegisterTheme(MacosTheme);
+        ThemeManagerService.RegisterTheme(NightTheme);
+    }
+}
